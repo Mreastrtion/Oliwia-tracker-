@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Her Daily Agenda ✦</title>
+<meta name="description" content="Daily agenda, habit tracker, journal & shadow work">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Agenda">
+<meta name="theme-color" content="#fdf0f4">
+<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkhlciBEYWlseSBBZ2VuZGEiLAogICJzaG9ydF9uYW1lIjogIkFnZW5kYSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmRmMGY0IiwKICAidGhlbWVfY29sb3IiOiAiI2ZkZjBmNCIKfQ==">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink-deep: #5a3050;
+    --pink-mid: #c4789a;
+    --pink-soft: #d48aaa;
+    --pink-pale: #e0a0c0;
+    --pink-ghost: rgba(212,160,180,0.12);
+    --bg-start: #fef5f8;
+    --bg-end: #eddae5;
+    --card-bg: rgba(255,255,255,0.55);
+    --card-border: rgba(255,255,255,0.7);
+    --text-muted: #a0809a;
+    --text-sub: #b08a9a;
+    --text-body: #6a4560;
+    --text-placeholder: #c4a0b0;
+    --success: #d48aaa;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: linear-gradient(165deg, var(--bg-start) 0%, #fdf0f4 15%, #fceef5 30%, #f8e8f0 50%, #f5e4ed 65%, #f0dce6 80%, var(--bg-end) 100%);
+    font-family: 'Crimson Pro', Georgia, serif;
+    color: #4a3545;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(0.8); }
+    50% { opacity: 0.6; transform: scale(1.2); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(3deg); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    60% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 { top: -120px; right: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(240,180,200,0.25) 0%, transparent 70%); }
+  .blob-2 { bottom: -100px; left: -60px; width: 350px; height: 350px; background: radial-gradient(circle, rgba(220,170,200,0.2) 0%, transparent 70%); }
+  .blob-3 { top: 40%; left: 50%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(245,200,215,0.12) 0%, transparent 60%); transform: translate(-50%, -50%); }
+
+  .star {
+    position: fixed;
+    pointer-events: none;
+    color: #f0c6d4;
+    animation: twinkle 3s ease-in-out infinite;
+    z-index: 0;
+    font-size: 10px;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Navigation */
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 36px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 14px 0;
+    background: linear-gradient(to bottom, rgba(253,240,244,0.95) 0%, rgba(253,240,244,0.8) 80%, transparent 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .nav-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 9px 20px;
+    border-radius: 30px;
+    border: 1.5px solid rgba(212,140,180,0.2);
+    background: rgba(255,255,255,0.5);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .nav-btn:hover { border-color: rgba(212,140,180,0.4); color: var(--pink-mid); }
+  .nav-btn.active {
+    background: linear-gradient(135deg, var(--pink-soft), var(--pink-mid));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 3px 14px rgba(212,138,170,0.3);
+  }
+
+  /* Header */
+  header { margin-bottom: 40px; text-align: center; }
+  .crown { display: inline-block; font-size: 32px; margin-bottom: 14px; animation: float 4s ease-in-out infinite; }
+  .date-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--pink-mid);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .greeting {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 7vw, 42px);
+    font-weight: 500;
+    font-style: italic;
+    color: var(--pink-deep);
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--text-sub);
+    font-weight: 500;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 28px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 30px rgba(200,140,160,0.08), 0 1px 3px rgba(0,0,0,0.03);
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.6s ease both;
+  }
+  .card-accent {
+    background: linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(250,230,240,0.5) 100%);
+    border: 1px solid rgba(230,180,200,0.35);
+  }
+  .card-shadow {
+    background: linear-gradient(145deg, rgba(255,255,255,0.45) 0%, rgba(240,220,235,0.4) 100%);
+    border: 1px solid rgba(200,160,185,0.3);
+  }
+
+  .card-icon {
+    position: absolute;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: var(--pink-mid);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  /* Affirmation */
+  .affirmation-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.55;
+    color: var(--pink-deep);
+  }
+
+  /* Habit tracker */
+  .habit-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .habit-count { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+  .habit-pct {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--pink-mid), var(--pink-pale));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .habit-pct.done { background: linear-gradient(135deg, #d4a0c0, #e8b8d4, #f0c8e0); -webkit-background-clip: text; background-clip: text; }
+
+  .progress-track {
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, rgba(212,160,180,0.15), rgba(212,160,180,0.1));
+    border-radius: 3px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pink-soft), var(--pink-pale), var(--pink-soft));
+    border-radius: 3px;
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .progress-fill.done {
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  .habit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid var(--pink-ghost);
+    transition: all 0.3s ease;
+    margin-bottom: 6px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .habit-item.checked {
+    background: rgba(220,170,200,0.12);
+    border-color: rgba(212,140,180,0.3);
+  }
+  .habit-check {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid rgba(200,160,180,0.35);
+    background: rgba(255,255,255,0.5);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 11px; color: #fff; font-weight: 700;
+  }
+  .habit-item.checked .habit-check {
+    border-color: var(--pink-soft);
+    background: linear-gradient(135deg, var(--pink-soft), var(--pink-pale));
+  }
+  .habit-icon { font-size: 17px; }
+  .habit-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pink-deep);
+    flex: 1;
+    transition: all 0.3s;
+  }
+  .habit-item.checked .habit-name {
+    color: #b89aaa;
+    text-decoration: line-through;
+    text-decoration-color: rgba(180,140,160,0.4);
+  }
+  .habit-remove {
+    background: none; border: none; color: #c0a0b0; cursor: pointer;
+    font-size: 16px; padding: 2px 6px; opacity: 0.25; transition: opacity 0.2s; line-height: 1;
+  }
+  .habit-remove:hover { opacity: 0.8; }
+
+  .add-habit-btn {
+    margin-top: 10px; padding: 10px 16px; width: 100%;
+    background: rgba(255,255,255,0.3);
+    border: 1.5px dashed rgba(212,140,180,0.25);
+    border-radius: 12px; color: var(--pink-mid); cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    transition: all 0.3s;
+  }
+  .add-habit-btn:hover { border-color: rgba(212,140,180,0.5); background: rgba(255,255,255,0.5); }
+
+  .add-habit-form {
+    margin-top: 10px; display: flex; gap: 8px; align-items: center;
+    animation: fadeUp 0.3s ease;
+  }
+  .add-habit-form input {
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.5);
+    border: 1.5px solid rgba(212,160,180,0.25);
+    border-radius: 10px; color: var(--pink-deep); font-size: 14px;
+    font-family: 'DM Sans', sans-serif; outline: none;
+  }
+  .add-habit-form input:focus { border-color: rgba(212,140,170,0.5); box-shadow: 0 0 0 3px rgba(212,140,170,0.1); }
+  .add-habit-form .icon-input { width: 44px; text-align: center; font-size: 18px; padding: 10px 6px; }
+  .add-habit-form .name-input { flex: 1; }
+  .btn-add {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, var(--pink-soft), var(--pink-mid));
+    border: none; border-radius: 10px; color: #fff; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+    box-shadow: 0 2px 10px rgba(212,138,170,0.3);
+  }
+  .btn-cancel {
+    padding: 10px 12px; background: rgba(255,255,255,0.4);
+    border: 1px solid rgba(212,160,180,0.15); border-radius: 10px;
+    color: var(--text-sub); cursor: pointer; font-size: 14px;
+  }
+
+  .completion-msg {
+    margin-top: 14px; text-align: center; padding: 14px;
+    background: linear-gradient(135deg, rgba(240,200,224,0.3), rgba(220,170,200,0.2));
+    border-radius: 14px; border: 1px solid rgba(220,170,200,0.25);
+    font-family: 'Caveat', cursive; font-size: 19px; color: #a06080;
+    animation: popIn 0.5s ease;
+  }
+
+  /* Fun fact */
+  .fact-text {
+    font-size: 16.5px; line-height: 1.65; color: var(--text-body); font-weight: 400;
+  }
+
+  /* Shadow work & journal */
+  .prompt-hint {
+    font-family: 'Caveat', cursive; font-size: 15px; color: var(--text-sub); margin-bottom: 14px;
+  }
+  .shadow-question {
+    font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 400;
+    line-height: 1.55; color: var(--pink-deep); font-style: italic; margin-bottom: 18px;
+  }
+
+  textarea {
+    width: 100%; padding: 16px 18px;
+    background: rgba(255,255,255,0.5);
+    border: 1.5px solid rgba(212,160,180,0.25);
+    border-radius: 14px; color: #4a3545; font-size: 15px;
+    font-family: 'Crimson Pro', Georgia, serif; line-height: 1.7;
+    resize: vertical; outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  textarea:focus { border-color: rgba(212,140,170,0.5); box-shadow: 0 0 0 3px rgba(212,140,170,0.1); }
+  textarea::placeholder { color: var(--text-placeholder); }
+
+  .word-count {
+    font-family: 'DM Sans', sans-serif; font-size: 11px; color: #c0a0b0;
+    margin-top: 8px; text-align: right;
+  }
+
+  /* History / Archive */
+  .history-entry {
+    background: rgba(255,255,255,0.4);
+    border: 1px solid rgba(212,160,180,0.15);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.4s ease both;
+  }
+  .history-date {
+    font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--pink-mid); font-weight: 600; margin-bottom: 14px;
+  }
+  .history-section {
+    margin-bottom: 14px;
+  }
+  .history-section-label {
+    font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 6px;
+  }
+  .history-text {
+    font-size: 15px; line-height: 1.6; color: var(--text-body);
+  }
+  .history-habits {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .history-habit-tag {
+    font-family: 'DM Sans', sans-serif; font-size: 12px; padding: 5px 12px;
+    border-radius: 20px; font-weight: 500;
+  }
+  .history-habit-tag.done { background: rgba(220,170,200,0.15); color: #a06080; }
+  .history-habit-tag.missed { background: rgba(0,0,0,0.03); color: #c0a0b0; text-decoration: line-through; }
+
+  .empty-state {
+    text-align: center; padding: 60px 20px;
+    font-family: 'Caveat', cursive; font-size: 20px; color: var(--text-sub);
+  }
+
+  /* Footer */
+  footer {
+    text-align: center; padding: 16px 0 24px;
+    font-family: 'Caveat', cursive; font-size: 20px; color: var(--pink-mid); font-weight: 500;
+  }
+
+  /* Mobile tweaks */
+  @media (max-width: 480px) {
+    .container { padding: 36px 16px 80px; }
+    .card { padding: 22px 20px; }
+    .nav-btn { padding: 8px 14px; font-size: 11px; letter-spacing: 1px; }
+    .greeting { font-size: 28px; }
+    .add-habit-form { flex-wrap: wrap; }
+    .add-habit-form .name-input { min-width: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<span class="star" style="top:8%;left:12%;animation-delay:0s;font-size:12px">✦</span>
+<span class="star" style="top:15%;right:18%;animation-delay:1.2s;font-size:8px">✦</span>
+<span class="star" style="top:35%;left:8%;animation-delay:0.6s">✦</span>
+<span class="star" style="top:55%;right:10%;animation-delay:2s;font-size:14px">✦</span>
+<span class="star" style="top:72%;left:15%;animation-delay:1.8s">✦</span>
+<span class="star" style="top:88%;right:20%;animation-delay:0.3s;font-size:11px">✦</span>
+
+<div class="container" id="app"></div>
+
+<script>
+// ─── DATA ───
+const SHADOW_WORK = [
+  "What emotion did I avoid today, and why?",
+  "When did I last feel truly seen by someone?",
+  "What story am I telling myself that might not be true?",
+  "What am I afraid people will find out about me?",
+  "When did I last betray my own boundaries?",
+  "What pattern from my childhood showed up today?",
+  "Who am I trying to prove something to?",
+  "What would I do differently if nobody was watching?",
+  "What part of myself do I judge the hardest?",
+  "What am I holding onto that no longer serves me?",
+  "When was the last time I said yes but meant no?",
+  "What does my inner critic sound like — whose voice is it really?",
+  "What am I projecting onto others that actually belongs to me?",
+  "What would I forgive myself for if I could?",
+  "What needs am I neglecting while taking care of others?",
+  "What fear is currently running my decisions?",
+  "When did I last feel genuinely proud of myself?",
+  "What uncomfortable truth have I been avoiding?",
+  "What would my 10-year-old self think of who I am now?",
+  "What mask did I wear today, and who was it for?",
+  "Where in my life am I settling for less than I deserve?",
+  "What triggers me most — and what wound does it touch?",
+  "If I didn't have to be strong, what would I let myself feel?",
+  "What relationship dynamic keeps repeating in my life?",
+  "What am I grieving that I haven't acknowledged yet?",
+  "What would change if I stopped people-pleasing for one week?",
+  "What part of my identity am I clinging to out of fear?",
+  "When was the last time I was fully honest with myself?",
+  "What would self-compassion look like for me right now?",
+  "What's one belief I inherited that I'm ready to let go of?"
+];
+
+const FUN_FACTS = [
+  "Octopuses have three hearts and blue blood.",
+  "Honey never spoils — edible honey was found in 3,000-year-old Egyptian tombs.",
+  "A group of flamingos is called a 'flamboyance.' Very fitting.",
+  "Bananas are berries, but strawberries aren't. The audacity.",
+  "The shortest war in history lasted 38 minutes. Icon behavior.",
+  "There are more trees on Earth than stars in the Milky Way.",
+  "Your brain uses 20% of your total energy — beauty and brains, babe.",
+  "Cows have best friends and get stressed when separated. Relatable.",
+  "Sea otters hold hands while sleeping so they don't drift apart.",
+  "A day on Venus is longer than a year on Venus. She takes her time.",
+  "Sharks are older than trees by about 50 million years.",
+  "Scotland's national animal is the unicorn. As it should be.",
+  "Butterflies taste with their feet. Iconic multitasking.",
+  "You can hear a blue whale's heartbeat from over 2 miles away.",
+  "Cleopatra lived closer to the Moon landing than the Great Pyramid.",
+  "The dot over 'i' and 'j' is called a tittle. Cute.",
+  "Polar bear fur is actually transparent, not white. Plot twist.",
+  "You share 60% of your DNA with a banana. Stay humble.",
+  "The Eiffel Tower grows up to 6 inches taller in summer. Growth era.",
+  "Humans glow in the dark — the light is just too faint for our eyes.",
+  "Dolphins have names for each other. Social queens.",
+  "Pineapples take about two years to grow. Good things take time.",
+  "Clouds can weigh more than a million pounds. Light and powerful.",
+  "Bees can recognize human faces. They're studying you too.",
+  "The heart of a shrimp is in its head. Lead with your heart.",
+  "Venus is the only planet that spins clockwise. She's different.",
+  "A single strand of spider silk is stronger than steel wire. Delicate but powerful.",
+  "There are more possible chess games than atoms in the observable universe.",
+  "Wombat poop is cube-shaped. Nature is unhinged.",
+  "A bolt of lightning is five times hotter than the sun's surface."
+];
+
+const AFFIRMATIONS = [
+  "I am the main character and I'm just getting started.",
+  "My energy is magnetic and I attract what I deserve.",
+  "I don't chase — I attract. What's for me will find me.",
+  "I am worthy of every single dream I have.",
+  "I'm not behind. I'm building something nobody's seen yet.",
+  "I trust myself to make the right call, always.",
+  "Small steps with big energy still move mountains.",
+  "I release anything that doesn't match my frequency.",
+  "I take up space unapologetically. That's my birthright.",
+  "My mind is powerful, even on the messy days.",
+  "Progress over perfection. Always.",
+  "I'm becoming the woman I always knew I could be.",
+  "I've survived 100% of my hardest days. I'm undefeated.",
+  "Rest is productive. I don't need to earn it.",
+  "I am on my own divine timeline and it's right on schedule.",
+  "My struggles are just plot development for my glow-up.",
+  "I deserve softness, especially from myself.",
+  "I am so much more than what I produce.",
+  "Every queen was once a student. I'm in my learning era.",
+  "I belong in every room I walk into. Period.",
+  "I am not my intrusive thoughts — I'm the boss watching them.",
+  "Today I choose courage over comfort. Scary but worth it.",
+  "I trust the process even when I can't see the full picture.",
+  "My energy is sacred and I choose where it goes.",
+  "I don't need anyone's permission to evolve.",
+  "Resilient even when I don't feel like it. That's powerful.",
+  "The right path isn't always the easy one — and I'm built for it.",
+  "I honor my needs without a single apology.",
+  "I am planting seeds today that will bloom beautifully.",
+  "I am enough. Right now. Exactly as I am. Full stop."
+];
+
+const DEFAULT_HABITS = [
+  { id: "h1", name: "10K steps", icon: "👟" },
+  { id: "h2", name: "Gym / Workout", icon: "🏋️‍♀️" },
+  { id: "h3", name: "120g protein minimum", icon: "🍗" },
+  { id: "h4", name: "Healthy snacks only", icon: "🥑" },
+  { id: "h5", name: "2 hrs university work", icon: "📖" },
+  { id: "h6", name: "2 hrs miracle time ✨", icon: "🪞" },
+  { id: "h7", name: "2 hrs family / boyfriend time", icon: "💕" },
+];
+
+// ─── HELPERS ───
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function dayOfYear() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  return Math.floor((now - start) / 864e5);
+}
+
+function formatDateFull(dateStr) {
+  if (!dateStr) {
+    return new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  }
+  const [y,m,d] = dateStr.split('-').map(Number);
+  return new Date(y, m-1, d).toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+}
+
+function getGreeting() {
+  const h = new Date().getHours();
+  return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+}
+
+// ─── STORAGE ───
+function loadToday() {
+  try {
+    const raw = localStorage.getItem('agenda_' + todayKey());
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return null;
+}
+
+function saveToday(data) {
+  try {
+    localStorage.setItem('agenda_' + todayKey(), JSON.stringify(data));
+  } catch(e) {}
+}
+
+function loadHabitConfig() {
+  try {
+    const raw = localStorage.getItem('agenda_habit_config');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return DEFAULT_HABITS;
+}
+
+function saveHabitConfig(habits) {
+  try {
+    localStorage.setItem('agenda_habit_config', JSON.stringify(habits));
+  } catch(e) {}
+}
+
+function getAllEntries() {
+  const entries = [];
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('agenda_2')) {
+        const dateStr = key.replace('agenda_', '');
+        const data = JSON.parse(localStorage.getItem(key));
+        entries.push({ date: dateStr, ...data });
+      }
+    }
+  } catch(e) {}
+  entries.sort((a, b) => b.date.localeCompare(a.date));
+  return entries;
+}
+
+// ─── STATE ───
+let currentView = 'today'; // 'today' | 'history'
+let habitConfig = loadHabitConfig();
+let todayData = loadToday() || { habits: {}, shadowAnswer: '', journalText: '' };
+let showAddHabit = false;
+
+function save() {
+  saveToday(todayData);
+}
+
+// ─── RENDER ───
+function render() {
+  const app = document.getElementById('app');
+  if (currentView === 'today') renderToday(app);
+  else renderHistory(app);
+}
+
+function renderToday(app) {
+  const dy = dayOfYear();
+  const affirmation = AFFIRMATIONS[dy % AFFIRMATIONS.length];
+  const fact = FUN_FACTS[dy % FUN_FACTS.length];
+  const shadowQ = SHADOW_WORK[dy % SHADOW_WORK.length];
+  const completed = habitConfig.filter(h => todayData.habits[h.id]).length;
+  const total = habitConfig.length;
+  const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+  app.innerHTML = `
+    <!-- Nav -->
+    <nav class="nav">
+      <button class="nav-btn active" onclick="switchView('today')">Today</button>
+      <button class="nav-btn" onclick="switchView('history')">Archive</button>
+    </nav>
+
+    <!-- Header -->
+    <header>
+      <div class="crown">👑</div>
+      <p class="date-label">${formatDateFull()}</p>
+      <h1 class="greeting">${getGreeting()}, gorgeous</h1>
+      <p class="subtitle">The world isn't ready for what you're about to do today ✦</p>
+    </header>
+
+    <!-- Affirmation -->
+    <section class="card card-accent" style="animation-delay:0.1s">
+      <span class="card-icon" style="top:10px;right:14px;font-size:28px;animation:float 5s ease-in-out infinite">🦋</span>
+      <p class="section-label">Today's Affirmation</p>
+      <p class="affirmation-text">"${affirmation}"</p>
+    </section>
+
+    <!-- Habit Tracker -->
+    <section class="card" style="animation-delay:0.15s">
+      <div class="habit-header">
+        <div>
+          <p class="section-label">Habit Tracker</p>
+          <p class="habit-count">${completed} of ${total} slayed</p>
+        </div>
+        <div class="habit-pct ${pct === 100 ? 'done' : ''}">${pct}%</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill ${pct === 100 ? 'done' : ''}" style="width:${pct}%"></div>
+      </div>
+      <div id="habit-list"></div>
+      <div id="add-habit-area"></div>
+      ${pct === 100 ? '<div class="completion-msg">All habits slayed — you ate and left no crumbs 💅✨</div>' : ''}
+    </section>
+
+    <!-- Fun Fact -->
+    <section class="card" style="animation-delay:0.2s">
+      <span class="card-icon" style="bottom:8px;right:14px;font-size:24px;animation:float 6s ease-in-out infinite">🔮</span>
+      <p class="section-label">Fun Fact of the Day</p>
+      <p class="fact-text">${fact}</p>
+    </section>
+
+    <!-- Shadow Work -->
+    <section class="card card-shadow" style="animation-delay:0.25s">
+      <span class="card-icon" style="top:12px;right:16px;font-size:26px">🌙</span>
+      <p class="section-label">Shadow Work</p>
+      <p class="prompt-hint">Be real with yourself. This is your safe space, babe.</p>
+      <p class="shadow-question">${shadowQ}</p>
+      <textarea id="shadow-textarea" rows="5" placeholder="Let it all out...">${todayData.shadowAnswer || ''}</textarea>
+    </section>
+
+    <!-- Journal -->
+    <section class="card" style="animation-delay:0.3s">
+      <span class="card-icon" style="top:12px;right:16px;font-size:24px;animation:float 5s ease-in-out infinite 0.5s">🪷</span>
+      <p class="section-label">Personal Thoughts</p>
+      <p class="prompt-hint">Unfiltered, unapologetic, just you.</p>
+      <textarea id="journal-textarea" rows="7" placeholder="Spill the tea with yourself...">${todayData.journalText || ''}</textarea>
+      <div class="word-count" id="word-count"></div>
+    </section>
+
+    <footer>She believed she could, so she did. 👑</footer>
+  `;
+
+  // Render habits
+  const habitList = document.getElementById('habit-list');
+  habitConfig.forEach((h, i) => {
+    const checked = todayData.habits[h.id];
+    const div = document.createElement('div');
+    div.className = 'habit-item' + (checked ? ' checked' : '');
+    div.style.animationDelay = (i * 0.05) + 's';
+    div.innerHTML = `
+      <div class="habit-check">${checked ? '✓' : ''}</div>
+      <span class="habit-icon">${h.icon}</span>
+      <span class="habit-name">${h.name}</span>
+      <button class="habit-remove" data-id="${h.id}">×</button>
+    `;
+    div.addEventListener('click', (e) => {
+      if (e.target.classList.contains('habit-remove')) return;
+      todayData.habits[h.id] = !todayData.habits[h.id];
+      save();
+      render();
+    });
+    div.querySelector('.habit-remove').addEventListener('click', (e) => {
+      e.stopPropagation();
+      habitConfig = habitConfig.filter(x => x.id !== h.id);
+      saveHabitConfig(habitConfig);
+      save();
+      render();
+    });
+    habitList.appendChild(div);
+  });
+
+  // Add habit area
+  const addArea = document.getElementById('add-habit-area');
+  if (!showAddHabit) {
+    addArea.innerHTML = `<button class="add-habit-btn" id="show-add-btn">+ Add a habit, queen</button>`;
+    document.getElementById('show-add-btn').addEventListener('click', () => { showAddHabit = true; render(); });
+  } else {
+    addArea.innerHTML = `
+      <div class="add-habit-form">
+        <input class="icon-input" id="new-icon" value="💅" maxlength="2">
+        <input class="name-input" id="new-name" placeholder="New habit...">
+        <button class="btn-add" id="btn-add">Add</button>
+        <button class="btn-cancel" id="btn-cancel">×</button>
+      </div>
+    `;
+    document.getElementById('new-name').focus();
+    document.getElementById('btn-add').addEventListener('click', addNewHabit);
+    document.getElementById('new-name').addEventListener('keydown', (e) => { if (e.key === 'Enter') addNewHabit(); });
+    document.getElementById('btn-cancel').addEventListener('click', () => { showAddHabit = false; render(); });
+  }
+
+  // Textareas
+  const shadowTA = document.getElementById('shadow-textarea');
+  const journalTA = document.getElementById('journal-textarea');
+  const wcDiv = document.getElementById('word-count');
+
+  function updateWordCount() {
+    const words = journalTA.value.trim().split(/\s+/).filter(Boolean).length;
+    wcDiv.textContent = words > 0 ? words + ' words ✦' : '';
+  }
+  updateWordCount();
+
+  shadowTA.addEventListener('input', () => { todayData.shadowAnswer = shadowTA.value; save(); });
+  journalTA.addEventListener('input', () => { todayData.journalText = journalTA.value; save(); updateWordCount(); });
+}
+
+function addNewHabit() {
+  const name = document.getElementById('new-name').value.trim();
+  const icon = document.getElementById('new-icon').value || '💅';
+  if (!name) return;
+  const newH = { id: 'h_' + Date.now(), name, icon };
+  habitConfig.push(newH);
+  saveHabitConfig(habitConfig);
+  showAddHabit = false;
+  render();
+}
+
+function renderHistory(app) {
+  const entries = getAllEntries().filter(e => e.date !== todayKey() || e.shadowAnswer || e.journalText || Object.values(e.habits||{}).some(Boolean));
+
+  app.innerHTML = `
+    <nav class="nav">
+      <button class="nav-btn" onclick="switchView('today')">Today</button>
+      <button class="nav-btn active" onclick="switchView('history')">Archive</button>
+    </nav>
+    <header>
+      <div class="crown">📖</div>
+      <h1 class="greeting" style="font-size:clamp(26px,6vw,36px)">Your Archive</h1>
+      <p class="subtitle">Look how far you've come ✦</p>
+    </header>
+    <div id="history-list"></div>
+    <footer>Every page of your story matters. 👑</footer>
+  `;
+
+  const list = document.getElementById('history-list');
+  if (entries.length === 0) {
+    list.innerHTML = '<div class="empty-state">No entries yet — today is day one! 🌱</div>';
+    return;
+  }
+
+  entries.forEach((entry, idx) => {
+    const dy = (() => {
+      const [y,m,d] = entry.date.split('-').map(Number);
+      const dt = new Date(y, m-1, d);
+      const start = new Date(y, 0, 0);
+      return Math.floor((dt - start) / 864e5);
+    })();
+
+    const div = document.createElement('div');
+    div.className = 'history-entry';
+    div.style.animationDelay = (idx * 0.08) + 's';
+
+    let html = `<p class="history-date">${formatDateFull(entry.date)}</p>`;
+
+    // Affirmation
+    html += `<div class="history-section">
+      <p class="history-section-label">Affirmation</p>
+      <p class="history-text" style="font-style:italic;color:var(--pink-deep)">"${AFFIRMATIONS[dy % AFFIRMATIONS.length]}"</p>
+    </div>`;
+
+    // Habits
+    const habitEntries = Object.entries(entry.habits || {});
+    if (habitEntries.length > 0) {
+      html += `<div class="history-section">
+        <p class="history-section-label">Habits</p>
+        <div class="history-habits">`;
+      // Try to match with config names
+      habitEntries.forEach(([id, done]) => {
+        const cfg = habitConfig.find(h => h.id === id) || DEFAULT_HABITS.find(h => h.id === id);
+        const name = cfg ? `${cfg.icon} ${cfg.name}` : id;
+        html += `<span class="history-habit-tag ${done ? 'done' : 'missed'}">${name}</span>`;
+      });
+      html += `</div></div>`;
+    }
+
+    // Shadow work
+    if (entry.shadowAnswer && entry.shadowAnswer.trim()) {
+      html += `<div class="history-section">
+        <p class="history-section-label">Shadow Work</p>
+        <p class="history-text" style="font-style:italic;margin-bottom:6px;color:var(--pink-deep)">${SHADOW_WORK[dy % SHADOW_WORK.length]}</p>
+        <p class="history-text">${entry.shadowAnswer.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</p>
+      </div>`;
+    }
+
+    // Journal
+    if (entry.journalText && entry.journalText.trim()) {
+      html += `<div class="history-section">
+        <p class="history-section-label">Journal</p>
+        <p class="history-text">${entry.journalText.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</p>
+      </div>`;
+    }
+
+    div.innerHTML = html;
+    list.appendChild(div);
+  });
+}
+
+// ─── NAV ───
+window.switchView = function(view) {
+  currentView = view;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// ─── AUTO-SAVE on visibility change ───
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) save();
+});
+
+// ─── INIT ───
+render();
+</script>
+</body>
+</html
