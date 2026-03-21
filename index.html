@@ -411,6 +411,134 @@
     font-family: 'Caveat', cursive; font-size: 20px; color: var(--pink-mid); font-weight: 500;
   }
 
+  /* Streak badge */
+  .streak-badge {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #c0607a;
+    background: rgba(255,180,180,0.15);
+    border-radius: 20px;
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+
+  /* Mood picker */
+  .mood-picker {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .mood-btn {
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 2px solid rgba(212,160,180,0.2);
+    background: rgba(255,255,255,0.4);
+    font-size: 22px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s ease;
+  }
+  .mood-btn:hover { border-color: rgba(212,140,180,0.5); transform: scale(1.1); }
+  .mood-btn.selected {
+    background: linear-gradient(135deg, rgba(212,138,170,0.25), rgba(212,160,200,0.2));
+    border-color: var(--pink-soft);
+    box-shadow: 0 2px 10px rgba(212,138,170,0.25);
+    transform: scale(1.15);
+  }
+
+  /* Stats view */
+  .stats-week-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 14px 0;
+  }
+  .week-day-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .week-day-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .week-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700;
+  }
+  .week-dot.high { background: linear-gradient(135deg, var(--pink-soft), var(--pink-pale)); color: #fff; }
+  .week-dot.mid { background: rgba(212,160,180,0.25); color: var(--pink-mid); }
+  .week-dot.low { background: rgba(0,0,0,0.04); color: #ccc; }
+  .week-dot.today { box-shadow: 0 0 0 2px var(--pink-mid); }
+  .week-dot.future { background: rgba(0,0,0,0.03); color: #ddd; }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid var(--pink-ghost);
+    border-radius: 12px;
+    margin-bottom: 6px;
+  }
+  .stat-row-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pink-deep);
+  }
+  .stat-row-right {
+    display: flex;
+    gap: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .stat-fire { color: #c0607a; }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .overview-cell {
+    text-align: center;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid var(--pink-ghost);
+    border-radius: 14px;
+    padding: 14px 8px;
+  }
+  .overview-num {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--pink-mid), var(--pink-pale));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .overview-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
   /* Mobile tweaks */
   @media (max-width: 480px) {
     .container { padding: 36px 16px 80px; }
@@ -419,6 +547,8 @@
     .greeting { font-size: 28px; }
     .add-habit-form { flex-wrap: wrap; }
     .add-habit-form .name-input { min-width: 0; }
+    .week-dot { width: 28px; height: 28px; font-size: 9px; }
+    .overview-num { font-size: 20px; }
   }
 </style>
 </head>
@@ -469,7 +599,67 @@ const SHADOW_WORK = [
   "What part of my identity am I clinging to out of fear?",
   "When was the last time I was fully honest with myself?",
   "What would self-compassion look like for me right now?",
-  "What's one belief I inherited that I'm ready to let go of?"
+  "What's one belief I inherited that I'm ready to let go of?",
+  "Where am I seeking validation I should be giving myself?",
+  "What feeling am I numbing with distraction right now?",
+  "What does my ideal self do that my current self avoids?",
+  "Who in my life do I feel I can't fully be myself around?",
+  "What would I do if I knew I couldn't fail?",
+  "What am I waiting for permission to begin?",
+  "What part of my past am I still punishing myself for?",
+  "What do I envy in others that I actually want for myself?",
+  "When did I last ask for help — and why don't I do it more?",
+  "What would change if I believed I was truly lovable?",
+  "What story do I tell about myself that keeps me small?",
+  "Which of my 'strengths' might actually be a coping mechanism?",
+  "What am I doing out of duty instead of genuine desire?",
+  "What emotion am I most afraid to show?",
+  "Where in my life do I feel like an imposter?",
+  "What boundary have I been too afraid to set?",
+  "What would I stop doing if I truly valued my own time?",
+  "What does my body know that my mind keeps ignoring?",
+  "What am I comparing myself to that doesn't even apply to me?",
+  "When do I feel most disconnected from who I really am?",
+  "What am I over-explaining to justify my own worth?",
+  "What would I tell my future self about this exact moment?",
+  "What do I secretly wish someone would just ask me about?",
+  "What part of me is tired of pretending to be fine?",
+  "What would I reclaim if shame wasn't in the equation?",
+  "What am I afraid would happen if I let myself succeed?",
+  "What does 'being enough' actually look like for me?",
+  "What am I mourning that I haven't given myself space to grieve?",
+  "What desire have I dismissed as 'too much'?",
+  "What do I keep saying I'll do 'when I'm ready' — and what would ready actually feel like?",
+  "Where am I playing the victim when I could choose agency?",
+  "What have I outgrown that I haven't let myself release?",
+  "What do I need to hear that I keep waiting for others to say?",
+  "Where am I betraying my own knowing to keep the peace?",
+  "What does my resistance to rest reveal about my self-worth?",
+  "What belief about love did I absorb as a child that I'm still living out?",
+  "What would I do differently if I stopped worrying about disappointing people?",
+  "What part of myself am I least willing to share — and why?",
+  "What do I keep doing that contradicts the person I say I want to be?",
+  "What would I pursue if approval from others was never part of the equation?",
+  "Who would I be if I removed all the labels people have given me?",
+  "What does 'home' feel like to me — and do I create that for myself?",
+  "What do I most fear about being truly known?",
+  "What version of love am I still chasing that was never actually healthy?",
+  "How does my relationship with my body reflect my relationship with myself?",
+  "What would I stop tolerating tomorrow if I believed I deserved better?",
+  "What feeling keeps showing up in my body that I keep pushing away?",
+  "What am I pretending not to know?",
+  "What would unconditional love from myself look like today?",
+  "What part of my vision for the future am I quietly sabotaging?",
+  "What old wound is being reopened right now — and what does it need?",
+  "What's the most honest thing I could say to myself today that I've been avoiding?",
+  "What patterns am I repeating because they feel familiar, not because they serve me?",
+  "What does my need for control say about what I'm afraid to trust?",
+  "Where am I shrinking myself to maintain a relationship or a role?",
+  "What would I grieve if I let myself acknowledge it fully?",
+  "What belief about myself do I know isn't true but can't yet release?",
+  "What am I doing out of love — and what am I doing out of fear of loss?",
+  "What part of me is still waiting for someone else to give me permission to begin?",
+  "What does my inner child most need to hear from me today?"
 ];
 
 const FUN_FACTS = [
@@ -502,7 +692,67 @@ const FUN_FACTS = [
   "A single strand of spider silk is stronger than steel wire. Delicate but powerful.",
   "There are more possible chess games than atoms in the observable universe.",
   "Wombat poop is cube-shaped. Nature is unhinged.",
-  "A bolt of lightning is five times hotter than the sun's surface."
+  "A bolt of lightning is five times hotter than the sun's surface.",
+  "Crows remember human faces and will hold a grudge for years. Respect.",
+  "The smell of rain has a name: petrichor. A whole mood.",
+  "Trees communicate through underground fungal networks. Nature has WiFi.",
+  "Elephants are the only animals that can't jump. They don't need to.",
+  "The inventor of the Pringles can is buried in one. As requested.",
+  "A snail can sleep for three years. That's a glow-up era right there.",
+  "The Pacific Ocean is wider than the moon. Let that sink in.",
+  "Cats can't taste sweetness. They live life untempted.",
+  "Oxford University is older than the Aztec Empire. Architecture queen.",
+  "Penguins propose with pebbles. The romance is unmatched.",
+  "The human nose can detect over 1 trillion different scents.",
+  "Sloths only poop once a week. Living slowly, sustainably.",
+  "Saturn could float on water — it's less dense than liquid. Effortlessly buoyant.",
+  "A group of owls is called a parliament. They run things.",
+  "Lobsters were once considered so low-status they were fed to prisoners.",
+  "The moon is moving away from Earth about 3.8 cm per year. Slowly leaving the era.",
+  "Sunflowers track the sun — even on cloudy days. Eternal optimists.",
+  "A hummingbird's heart beats over 1,200 times per minute.",
+  "Otters have a favourite rock they carry in a little skin pouch. Sentimental queens.",
+  "Your fingerprints were formed before you were born and are uniquely yours forever.",
+  "Some turtles breathe through their behinds in winter. Survival by any means.",
+  "Chameleons change colour to communicate mood, not to camouflage. Emotional.",
+  "There's a species of jellyfish that is technically immortal. Biologically undefeated.",
+  "Cleopatra was closer in time to the first iPhone than to the Great Pyramid.",
+  "The mantis shrimp can see 16 types of colour receptors. We have 3. Humbling.",
+  "All giant pandas are owned by China — even the ones in foreign zoos.",
+  "It would take about 1.3 million Earths to fill the Sun. She's that girl.",
+  "Pistachios are technically fruits. More like gems, honestly.",
+  "Kangaroos can't walk backwards. Always moving forward. Main character energy.",
+  "Sharks have to keep swimming to breathe. Rest is not an option. Respect.",
+  "Elephants are the only land animals with four knees. Unique architecture.",
+  "The Eiffel Tower was originally meant to be a temporary structure. She said stay.",
+  "Glass is technically a super-cooled liquid. It just takes its time.",
+  "The average cloud weighs about 1.1 million pounds. Light is just her aesthetic.",
+  "A group of cats is called a clowder. And they rule it.",
+  "Volcanic rock called pumice is the only rock that floats. Even geology has range.",
+  "The electric eel isn't actually an eel — it's a knifefish. Labels are limiting.",
+  "It would take about 100,000 years to travel to the nearest star at spacecraft speed. Patience.",
+  "The word 'nerd' was first used by Dr. Seuss in 1950. Origin story.",
+  "Honey badgers have skin so loose they can turn around inside it to bite attackers. Tactical.",
+  "There's enough DNA in your body to stretch from the sun to Pluto and back 17 times.",
+  "A flock of ravens is called an unkindness. Dramatic. Iconic.",
+  "Pigs can get sunburned. They actually invented SPF culture.",
+  "Almonds are seeds of stone fruits — basically tiny peach pits. Identity twist.",
+  "Some oysters can change their biological sex multiple times. Fluid and fabulous.",
+  "The first oranges weren't orange — they were green. Never judge by appearance.",
+  "A single teaspoon of a neutron star would weigh a billion tons. Dense but radiant.",
+  "Elephants are afraid of bees. Even the greats have their kryptonite.",
+  "Ravens have been observed playing. Apparently joy is for everyone.",
+  "You can't hum while holding your nose. Try it. You're welcome.",
+  "The inventor of Super Soaker was a NASA engineer. Excellence is multidimensional.",
+  "Every snowflake has a unique structure, just like you. Not a cliché — science.",
+  "A bolt of lightning lasts less than a second but produces enough energy to toast 100,000 slices of bread.",
+  "The human eye can distinguish about 10 million different colours. You see the world in full detail.",
+  "Crows bring gifts to humans who feed them regularly. Loyalty on a different level.",
+  "Bees sleep between 5-8 hours daily. Rest is essential even for the hardest workers.",
+  "The Amazon rainforest produces 20% of the world's oxygen. Quietly carrying the planet.",
+  "It rains diamonds on Neptune and Uranus. Somewhere out there, it's raining luxury.",
+  "You are made of atoms that are billions of years old. You are literally ancient and eternal.",
+  "The human heart beats about 100,000 times a day — yours has never missed a beat for you."
 ];
 
 const AFFIRMATIONS = [
@@ -535,7 +785,67 @@ const AFFIRMATIONS = [
   "The right path isn't always the easy one — and I'm built for it.",
   "I honor my needs without a single apology.",
   "I am planting seeds today that will bloom beautifully.",
-  "I am enough. Right now. Exactly as I am. Full stop."
+  "I am enough. Right now. Exactly as I am. Full stop.",
+  "I am not starting over — I am starting stronger.",
+  "My healing doesn't have to be linear to be real.",
+  "I give myself permission to want more and expect more.",
+  "I am the prize. I stop forgetting that.",
+  "Every version of me has gotten me here. I honour them all.",
+  "I choose myself first. Loudly and without guilt.",
+  "I don't compete. I create. My lane is mine alone.",
+  "I release the pressure to be further along than I am.",
+  "The universe is conspiring in my favour, even now.",
+  "I am magnetic — people feel the shift when I walk in.",
+  "Being myself is the most powerful thing I can do.",
+  "My standards are high because I know my worth. No compromise.",
+  "I turn stumbling blocks into stepping stones. That's my superpower.",
+  "Good things are happening to me and I am ready to receive them.",
+  "I have everything I need within me to handle what comes next.",
+  "My sensitivity is not a weakness — it's my depth.",
+  "I am worthy of love that doesn't ask me to shrink.",
+  "Discipline is how I love myself on the days I don't feel like it.",
+  "I trust my intuition more than any opinion from the outside.",
+  "I am not the version of me anyone tried to limit. I outgrew that story.",
+  "Every day I choose to show up for myself is a revolution.",
+  "I am becoming — and becoming is beautiful.",
+  "My presence is a gift. I stop dimming it to make others comfortable.",
+  "I am exactly where I need to be while also moving forward. Both are true.",
+  "I am proud of myself even when no one else knows what I overcame today.",
+  "I attract people who match my energy, not my hunger.",
+  "Being a work in progress is not the same as being broken.",
+  "I let go of who I was yesterday to make room for who I am today.",
+  "I am powerful beyond what fear has told me, and I'm finally proving it.",
+  "I don't need to have it all together to deserve good things.",
+  "I give myself the same grace I give to the people I love.",
+  "My value isn't tied to how much I produce or how busy I am.",
+  "I am worthy of investment — in myself, from myself, first.",
+  "My past is not my ceiling. It's my foundation.",
+  "I make space for joy without needing to justify it.",
+  "I am allowed to change my mind, change direction, and start fresh.",
+  "The right doors open for me when I stop forcing the wrong ones.",
+  "I lead with intention and trust the outcome.",
+  "I celebrate small wins because that's how momentum builds.",
+  "I deserve a life that feels as good as it looks.",
+  "I am in conversation with my highest self, and she's incredible.",
+  "I release comparison — my journey is singular and that's its power.",
+  "I choose thoughts that expand me, not shrink me.",
+  "My healing is quiet and private and real and valid.",
+  "I show up imperfectly and that still counts.",
+  "I attract clarity because I'm willing to be honest with myself.",
+  "I am not waiting for life to begin — this is it, and it's mine.",
+  "I walk into this day with my full self and I leave nothing behind.",
+  "I was built for this. I always was.",
+  "Everything I need to rise is already inside of me — today I access it.",
+  "I trust that growth is happening even when I can't see it.",
+  "I am the answer to prayers I haven't even prayed yet.",
+  "This version of me is worth betting on. So I do.",
+  "I am not just surviving. I am crafting something magnificent.",
+  "I choose presence over perfection, every single time.",
+  "I am exactly the person I needed when I was younger.",
+  "My story isn't over — it's just entering its best chapter.",
+  "I am the energy I've been waiting for.",
+  "I deserve to be the main character of my own story — and today I claim that role.",
+  "I am enough, I have enough, and I do enough. Now and always."
 ];
 
 const DEFAULT_HABITS = [
@@ -619,20 +929,66 @@ function getAllEntries() {
 }
 
 // ─── STATE ───
-let currentView = 'today'; // 'today' | 'history'
+let currentView = 'today'; // 'today' | 'history' | 'stats'
 let habitConfig = loadHabitConfig();
-let todayData = loadToday() || { habits: {}, shadowAnswer: '', journalText: '' };
+let todayData = loadToday() || { habits: {}, shadowAnswer: '', journalText: '', mood: null };
 let showAddHabit = false;
 
 function save() {
   saveToday(todayData);
 }
 
+// ─── STREAK HELPERS ───
+function computeStreak(habitId) {
+  const entries = getAllEntries();
+  // entries are sorted descending by date; skip today if not yet saved as complete
+  let streak = 0;
+  let prev = null;
+  for (const e of entries) {
+    if (!e.habits || !e.habits[habitId]) break;
+    if (prev !== null) {
+      // Check consecutive day
+      const prevDate = new Date(prev + 'T00:00:00');
+      const curDate = new Date(e.date + 'T00:00:00');
+      const diff = Math.round((prevDate - curDate) / 864e5);
+      if (diff !== 1) break;
+    }
+    streak++;
+    prev = e.date;
+  }
+  return streak;
+}
+
+function getBestStreak(habitId) {
+  const entries = getAllEntries(); // descending
+  const ascending = [...entries].reverse();
+  let best = 0, cur = 0, prev = null;
+  for (const e of ascending) {
+    if (e.habits && e.habits[habitId]) {
+      if (prev !== null) {
+        const prevDate = new Date(prev + 'T00:00:00');
+        const curDate = new Date(e.date + 'T00:00:00');
+        const diff = Math.round((curDate - prevDate) / 864e5);
+        cur = diff === 1 ? cur + 1 : 1;
+      } else {
+        cur = 1;
+      }
+      if (cur > best) best = cur;
+      prev = e.date;
+    } else {
+      cur = 0;
+      prev = null;
+    }
+  }
+  return best;
+}
+
 // ─── RENDER ───
 function render() {
   const app = document.getElementById('app');
   if (currentView === 'today') renderToday(app);
-  else renderHistory(app);
+  else if (currentView === 'history') renderHistory(app);
+  else renderStats(app);
 }
 
 function renderToday(app) {
@@ -644,11 +1000,15 @@ function renderToday(app) {
   const total = habitConfig.length;
   const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
+  const moodEmojis = ['😔','😕','😐','🙂','😊'];
+  const moodLabels = ['rough','meh','okay','good','great'];
+
   app.innerHTML = `
     <!-- Nav -->
     <nav class="nav">
       <button class="nav-btn active" onclick="switchView('today')">Today</button>
       <button class="nav-btn" onclick="switchView('history')">Archive</button>
+      <button class="nav-btn" onclick="switchView('stats')">Stats</button>
     </nav>
 
     <!-- Header -->
@@ -666,6 +1026,15 @@ function renderToday(app) {
       <p class="affirmation-text">"${affirmation}"</p>
     </section>
 
+    <!-- Mood Tracker -->
+    <section class="card" style="animation-delay:0.12s">
+      <p class="section-label">How are you feeling today?</p>
+      <div class="mood-picker">
+        ${moodEmojis.map((e, i) => `<button class="mood-btn${todayData.mood === i+1 ? ' selected' : ''}" title="${moodLabels[i]}" onclick="setMood(${i+1})">${e}</button>`).join('')}
+      </div>
+      ${todayData.mood ? `<p style="text-align:center;margin-top:10px;font-family:'Caveat',cursive;font-size:16px;color:var(--text-sub)">Feeling ${moodLabels[todayData.mood-1]} today ${moodEmojis[todayData.mood-1]}</p>` : ''}
+    </section>
+
     <!-- Habit Tracker -->
     <section class="card" style="animation-delay:0.15s">
       <div class="habit-header">
@@ -681,6 +1050,13 @@ function renderToday(app) {
       <div id="habit-list"></div>
       <div id="add-habit-area"></div>
       ${pct === 100 ? '<div class="completion-msg">All habits slayed — you ate and left no crumbs 💅✨</div>' : ''}
+      ${(() => {
+        const milestoneHabits = habitConfig.map(h => ({ h, s: computeStreak(h.id) })).filter(x => [7,14,21,30].includes(x.s));
+        if (!milestoneHabits.length) return '';
+        const { h, s } = milestoneHabits[0];
+        const msgs = { 7:'7-day streak — a whole week of showing up! 🔥', 14:'14 days strong — you\'re building something real! 🌟', 21:'21 days! New habit unlocked — queen behavior 👑', 30:'30-day streak — you\'re literally unstoppable 💎' };
+        return `<div class="completion-msg">${h.icon} ${msgs[s]}</div>`;
+      })()}
     </section>
 
     <!-- Fun Fact -->
@@ -715,6 +1091,8 @@ function renderToday(app) {
   const habitList = document.getElementById('habit-list');
   habitConfig.forEach((h, i) => {
     const checked = todayData.habits[h.id];
+    const streak = computeStreak(h.id);
+    const streakBadge = streak >= 2 ? `<span class="streak-badge">🔥 ${streak}</span>` : '';
     const div = document.createElement('div');
     div.className = 'habit-item' + (checked ? ' checked' : '');
     div.style.animationDelay = (i * 0.05) + 's';
@@ -722,6 +1100,7 @@ function renderToday(app) {
       <div class="habit-check">${checked ? '✓' : ''}</div>
       <span class="habit-icon">${h.icon}</span>
       <span class="habit-name">${h.name}</span>
+      ${streakBadge}
       <button class="habit-remove" data-id="${h.id}">×</button>
     `;
     div.addEventListener('click', (e) => {
@@ -793,6 +1172,7 @@ function renderHistory(app) {
     <nav class="nav">
       <button class="nav-btn" onclick="switchView('today')">Today</button>
       <button class="nav-btn active" onclick="switchView('history')">Archive</button>
+      <button class="nav-btn" onclick="switchView('stats')">Stats</button>
     </nav>
     <header>
       <div class="crown">📖</div>
@@ -821,7 +1201,17 @@ function renderHistory(app) {
     div.className = 'history-entry';
     div.style.animationDelay = (idx * 0.08) + 's';
 
+    const moodEmojisH = ['😔','😕','😐','🙂','😊'];
+    const moodLabelsH = ['rough','meh','okay','good','great'];
     let html = `<p class="history-date">${formatDateFull(entry.date)}</p>`;
+
+    // Mood
+    if (entry.mood) {
+      html += `<div class="history-section">
+        <p class="history-section-label">Mood</p>
+        <p class="history-text">${moodEmojisH[entry.mood-1]} Feeling ${moodLabelsH[entry.mood-1]}</p>
+      </div>`;
+    }
 
     // Affirmation
     html += `<div class="history-section">
@@ -864,6 +1254,142 @@ function renderHistory(app) {
     div.innerHTML = html;
     list.appendChild(div);
   });
+}
+
+// ─── MOOD ───
+window.setMood = function(val) {
+  todayData.mood = todayData.mood === val ? null : val;
+  save();
+  render();
+};
+
+// ─── STATS ───
+function renderStats(app) {
+  const entries = getAllEntries();
+  const today = todayKey();
+  const totalDays = entries.length;
+
+  // Overview stats
+  let bestCompletion = 0, totalPct = 0, countedDays = 0;
+  entries.forEach(e => {
+    const hIds = Object.keys(e.habits || {});
+    if (!hIds.length) return;
+    const done = hIds.filter(id => e.habits[id]).length;
+    const p = Math.round((done / hIds.length) * 100);
+    if (p > bestCompletion) bestCompletion = p;
+    totalPct += p;
+    countedDays++;
+  });
+  const avgPct = countedDays > 0 ? Math.round(totalPct / countedDays) : 0;
+
+  // Build week row: last 7 days (Mon→Sun of current week or rolling 7)
+  const weekDays = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const labels = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+    const label = labels[d.getDay()];
+    const entry = entries.find(e => e.date === key);
+    let pct = null;
+    if (entry) {
+      const hIds = Object.keys(entry.habits || {});
+      pct = hIds.length ? Math.round((hIds.filter(id => entry.habits[id]).length / hIds.length) * 100) : 0;
+    }
+    weekDays.push({ key, label, pct, isToday: key === today, isFuture: key > today });
+  }
+
+  app.innerHTML = `
+    <nav class="nav">
+      <button class="nav-btn" onclick="switchView('today')">Today</button>
+      <button class="nav-btn" onclick="switchView('history')">Archive</button>
+      <button class="nav-btn active" onclick="switchView('stats')">Stats</button>
+    </nav>
+    <header>
+      <div class="crown">✦</div>
+      <h1 class="greeting" style="font-size:clamp(26px,6vw,36px)">Your Journey</h1>
+      <p class="subtitle">Every day counts, babe ✦</p>
+    </header>
+
+    <!-- Overview -->
+    <section class="card card-accent" style="animation-delay:0.1s">
+      <p class="section-label">Overview</p>
+      <div class="overview-grid">
+        <div class="overview-cell">
+          <div class="overview-num">${totalDays}</div>
+          <div class="overview-label">Days tracked</div>
+        </div>
+        <div class="overview-cell">
+          <div class="overview-num">${avgPct}%</div>
+          <div class="overview-label">Avg daily</div>
+        </div>
+        <div class="overview-cell">
+          <div class="overview-num">${bestCompletion}%</div>
+          <div class="overview-label">Best day</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- This Week -->
+    <section class="card" style="animation-delay:0.15s">
+      <p class="section-label">This Week</p>
+      <div class="stats-week-row">
+        ${weekDays.map(wd => {
+          let cls = 'week-dot';
+          let inner = wd.label;
+          if (wd.isFuture) {
+            cls += ' future';
+          } else if (wd.pct === null) {
+            cls += ' low';
+          } else if (wd.pct >= 70) {
+            cls += ' high';
+            inner = wd.pct + '%';
+          } else if (wd.pct >= 30) {
+            cls += ' mid';
+            inner = wd.pct + '%';
+          } else {
+            cls += ' low';
+            inner = wd.pct + '%';
+          }
+          if (wd.isToday) cls += ' today';
+          return `<div class="week-day-col">
+            <div class="week-day-label">${wd.label}</div>
+            <div class="${cls}">${inner}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </section>
+
+    <!-- Habit Streaks -->
+    <section class="card" style="animation-delay:0.2s">
+      <p class="section-label">Habit Streaks</p>
+      <div id="streak-list"></div>
+      ${habitConfig.length === 0 ? '<p style="text-align:center;color:var(--text-muted);font-family:\'DM Sans\',sans-serif;font-size:14px">No habits yet — add some!</p>' : ''}
+    </section>
+
+    <footer>Keep going. The data doesn't lie. 👑</footer>
+  `;
+
+  const streakList = document.getElementById('streak-list');
+  if (streakList) {
+    habitConfig.forEach(h => {
+      const cur = computeStreak(h.id);
+      const best = getBestStreak(h.id);
+      const row = document.createElement('div');
+      row.className = 'stat-row';
+      row.innerHTML = `
+        <div class="stat-row-left">
+          <span>${h.icon}</span>
+          <span>${h.name}</span>
+        </div>
+        <div class="stat-row-right">
+          <span class="stat-fire">🔥 ${cur} now</span>
+          <span>⭐ ${best} best</span>
+        </div>
+      `;
+      streakList.appendChild(row);
+    });
+  }
 }
 
 // ─── NAV ───
