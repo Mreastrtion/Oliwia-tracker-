@@ -539,16 +539,225 @@
     margin-top: 4px;
   }
 
+  /* ── Cycle / Period Tracker ── */
+
+  /* Calendar grid */
+  .cal-month-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--pink-mid);
+    margin-bottom: 12px;
+  }
+  .cal-weekday-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+  .cal-weekday {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 4px 0;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-body);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .cal-day:hover:not(.cal-empty):not(.cal-future-lock) {
+    background: rgba(212,160,180,0.15);
+  }
+  .cal-day.cal-empty { pointer-events: none; visibility: hidden; }
+  .cal-day.cal-future-lock { opacity: 0.45; cursor: default; }
+  .cal-day.cal-today {
+    box-shadow: 0 0 0 2px var(--pink-mid);
+    font-weight: 700;
+    color: var(--pink-deep);
+  }
+  .cal-day.cal-period {
+    background: linear-gradient(135deg, #b84060, #d4608a);
+    color: #fff;
+    font-weight: 700;
+  }
+  .cal-day.cal-period.cal-today {
+    box-shadow: 0 0 0 2.5px #7a1030;
+  }
+  .cal-day.cal-predicted {
+    background: rgba(212,140,170,0.15);
+    border: 1.5px dashed rgba(196,120,154,0.5);
+    color: var(--pink-mid);
+  }
+  .cal-day.cal-predicted.cal-today {
+    box-shadow: 0 0 0 2px var(--pink-mid);
+  }
+
+  /* Phase dot below day number */
+  .cal-phase-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+  .phase-menstrual .cal-phase-dot { background: #b84060; }
+  .phase-follicular .cal-phase-dot { background: #9070c8; }
+  .phase-ovulation .cal-phase-dot { background: #c8a030; }
+  .phase-luteal .cal-phase-dot { background: #c07880; }
+
+  /* Countdown card */
+  .countdown-wrap {
+    text-align: center;
+    padding: 8px 0 4px;
+  }
+  .countdown-num {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 68px;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, #b84060, var(--pink-mid), var(--pink-pale));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .countdown-unit {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .countdown-msg {
+    font-family: 'Caveat', cursive;
+    font-size: 19px;
+    color: var(--text-sub);
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+
+  /* Phase card */
+  .phase-card-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .phase-emoji-big {
+    font-size: 38px;
+    flex-shrink: 0;
+  }
+  .phase-card-text { flex: 1; }
+  .phase-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--pink-deep);
+    margin-bottom: 4px;
+  }
+  .phase-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--pink-mid);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .phase-desc {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    color: var(--text-sub);
+    line-height: 1.45;
+  }
+
+  /* Legend */
+  .cal-legend {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  .cal-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .legend-dot {
+    width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+  }
+  .legend-dot.period { background: linear-gradient(135deg, #b84060, #d4608a); }
+  .legend-dot.predicted { background: rgba(212,140,170,0.2); border: 1.5px dashed rgba(196,120,154,0.6); }
+  .legend-dot.today { border: 2px solid var(--pink-mid); }
+
+  /* Phase legend strip */
+  .phase-legend {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .phase-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .phase-pip {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .phase-pip.menstrual { background: #b84060; }
+  .phase-pip.follicular { background: #9070c8; }
+  .phase-pip.ovulation { background: #c8a030; }
+  .phase-pip.luteal { background: #c07880; }
+
   /* Mobile tweaks */
   @media (max-width: 480px) {
     .container { padding: 36px 16px 80px; }
     .card { padding: 22px 20px; }
-    .nav-btn { padding: 8px 14px; font-size: 11px; letter-spacing: 1px; }
+    .nav-btn { padding: 8px 10px; font-size: 10px; letter-spacing: 0.8px; }
     .greeting { font-size: 28px; }
     .add-habit-form { flex-wrap: wrap; }
     .add-habit-form .name-input { min-width: 0; }
     .week-dot { width: 28px; height: 28px; font-size: 9px; }
     .overview-num { font-size: 20px; }
+    .countdown-num { font-size: 52px; }
+    .cal-day { font-size: 12px; }
   }
 </style>
 </head>
@@ -912,6 +1121,20 @@ function saveHabitConfig(habits) {
   } catch(e) {}
 }
 
+function loadPeriodLog() {
+  try {
+    const raw = localStorage.getItem('agenda_period_log');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return [];
+}
+
+function savePeriodLog(log) {
+  try {
+    localStorage.setItem('agenda_period_log', JSON.stringify(log));
+  } catch(e) {}
+}
+
 function getAllEntries() {
   const entries = [];
   try {
@@ -933,9 +1156,125 @@ let currentView = 'today'; // 'today' | 'history' | 'stats'
 let habitConfig = loadHabitConfig();
 let todayData = loadToday() || { habits: {}, shadowAnswer: '', journalText: '', mood: null };
 let showAddHabit = false;
+let periodLog = loadPeriodLog(); // string[] of YYYY-MM-DD
 
 function save() {
   saveToday(todayData);
+}
+
+// ─── PERIOD / CYCLE HELPERS ───
+
+function dateStrToDate(s) {
+  const [y, m, d] = s.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
+function dateToStr(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function addDays(d, n) {
+  const r = new Date(d);
+  r.setDate(r.getDate() + n);
+  return r;
+}
+
+function daysDiff(a, b) {
+  // Returns b - a in whole days
+  return Math.round((b - a) / 864e5);
+}
+
+// Groups sorted date strings into consecutive runs [{start, end, len}]
+function getPeriodRuns(log) {
+  if (!log.length) return [];
+  const sorted = [...log].sort();
+  const runs = [];
+  let runStart = sorted[0], runEnd = sorted[0];
+  for (let i = 1; i < sorted.length; i++) {
+    const prev = dateStrToDate(sorted[i - 1]);
+    const cur = dateStrToDate(sorted[i]);
+    if (daysDiff(prev, cur) === 1) {
+      runEnd = sorted[i];
+    } else {
+      runs.push({ start: runStart, end: runEnd, len: daysDiff(dateStrToDate(runStart), dateStrToDate(runEnd)) + 1 });
+      runStart = sorted[i]; runEnd = sorted[i];
+    }
+  }
+  runs.push({ start: runStart, end: runEnd, len: daysDiff(dateStrToDate(runStart), dateStrToDate(runEnd)) + 1 });
+  return runs;
+}
+
+function getAvgCycleLength(runs) {
+  if (runs.length < 2) return 28;
+  let total = 0;
+  for (let i = 1; i < runs.length; i++) {
+    total += daysDiff(dateStrToDate(runs[i-1].start), dateStrToDate(runs[i].start));
+  }
+  return Math.round(total / (runs.length - 1));
+}
+
+function getAvgPeriodDuration(runs) {
+  if (!runs.length) return 5;
+  return Math.round(runs.reduce((s, r) => s + r.len, 0) / runs.length);
+}
+
+// Returns predicted period start dates as Date objects (up to 4 future windows)
+function getPredictedWindows(runs) {
+  if (!runs.length) return [];
+  const avgCycle = getAvgCycleLength(runs);
+  const avgDur = getAvgPeriodDuration(runs);
+  const lastStart = dateStrToDate(runs[runs.length - 1].start);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const windows = [];
+  // Go far enough forward to get 4 upcoming windows
+  for (let i = 1; i <= 8; i++) {
+    const start = addDays(lastStart, avgCycle * i);
+    if (windows.length >= 4) break;
+    windows.push({ start, end: addDays(start, avgDur - 1), avgDur });
+  }
+  return windows;
+}
+
+// Returns set of predicted YYYY-MM-DD strings
+function getPredictedDaySet(runs) {
+  const set = new Set();
+  const windows = getPredictedWindows(runs);
+  windows.forEach(w => {
+    for (let i = 0; i < w.avgDur; i++) {
+      set.add(dateToStr(addDays(w.start, i)));
+    }
+  });
+  return set;
+}
+
+// Returns 'menstrual'|'follicular'|'ovulation'|'luteal'|null for a given date
+function getPhaseForDate(dateStr, runs) {
+  if (!runs.length) return null;
+  const avgCycle = getAvgCycleLength(runs);
+  const avgDur = getAvgPeriodDuration(runs);
+  const date = dateStrToDate(dateStr);
+  const lastStart = dateStrToDate(runs[runs.length - 1].start);
+  // Find which cycle number this date is in
+  const diff = daysDiff(lastStart, date);
+  // Normalise to position within a cycle (could be past or future cycles)
+  let pos = diff % avgCycle;
+  if (pos < 0) pos += avgCycle;
+  const day = pos + 1; // day 1-based within cycle
+  if (day <= avgDur) return 'menstrual';
+  if (day <= 13) return 'follicular';
+  if (day <= 15) return 'ovulation';
+  return 'luteal';
+}
+
+// Days until next predicted period (negative = currently in period)
+function getDaysUntilNext(runs) {
+  if (!runs.length) return null;
+  const avgCycle = getAvgCycleLength(runs);
+  const lastStart = dateStrToDate(runs[runs.length - 1].start);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const daysSinceLast = daysDiff(lastStart, today);
+  const rem = avgCycle - (daysSinceLast % avgCycle);
+  return rem === avgCycle ? 0 : rem;
 }
 
 // ─── STREAK HELPERS ───
@@ -988,7 +1327,8 @@ function render() {
   const app = document.getElementById('app');
   if (currentView === 'today') renderToday(app);
   else if (currentView === 'history') renderHistory(app);
-  else renderStats(app);
+  else if (currentView === 'stats') renderStats(app);
+  else renderCycle(app);
 }
 
 function renderToday(app) {
@@ -1009,6 +1349,7 @@ function renderToday(app) {
       <button class="nav-btn active" onclick="switchView('today')">Today</button>
       <button class="nav-btn" onclick="switchView('history')">Archive</button>
       <button class="nav-btn" onclick="switchView('stats')">Stats</button>
+      <button class="nav-btn" onclick="switchView('cycle')">Cycle</button>
     </nav>
 
     <!-- Header -->
@@ -1173,6 +1514,7 @@ function renderHistory(app) {
       <button class="nav-btn" onclick="switchView('today')">Today</button>
       <button class="nav-btn active" onclick="switchView('history')">Archive</button>
       <button class="nav-btn" onclick="switchView('stats')">Stats</button>
+      <button class="nav-btn" onclick="switchView('cycle')">Cycle</button>
     </nav>
     <header>
       <div class="crown">📖</div>
@@ -1256,6 +1598,193 @@ function renderHistory(app) {
   });
 }
 
+// ─── CYCLE / PERIOD ───
+window.togglePeriodDay = function(dateStr) {
+  const idx = periodLog.indexOf(dateStr);
+  if (idx === -1) periodLog.push(dateStr);
+  else periodLog.splice(idx, 1);
+  savePeriodLog(periodLog);
+  render();
+};
+
+function buildCalMonth(year, month, logSet, predictedSet, runs) {
+  // month is 0-indexed
+  const today = todayKey();
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+  // Convert to Mon-first: 0=Mon...6=Sun
+  const startOffset = (firstDay + 6) % 7;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const dayLabels = ['M','T','W','T','F','S','S'];
+
+  let gridHTML = '';
+  // Empty cells before month start
+  for (let i = 0; i < startOffset; i++) {
+    gridHTML += `<div class="cal-day cal-empty"></div>`;
+  }
+
+  const todayDate = new Date(); todayDate.setHours(0,0,0,0);
+  const cellMonth = new Date(year, month, 1);
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isPeriod = logSet.has(ds);
+    const isPredicted = !isPeriod && predictedSet.has(ds);
+    const isToday = ds === today;
+    const cellDate = new Date(year, month, d);
+    const isFuture = cellDate > todayDate && !isPredicted;
+    const isFutureLock = cellDate > todayDate; // all future days non-tappable
+    const phase = runs.length ? getPhaseForDate(ds, runs) : null;
+
+    let cls = 'cal-day';
+    if (isPeriod) cls += ' cal-period';
+    else if (isPredicted) cls += ' cal-predicted';
+    if (isToday) cls += ' cal-today';
+    if (isFutureLock) cls += ' cal-future-lock';
+    if (phase) cls += ` phase-${phase}`;
+
+    const phDot = phase ? `<div class="cal-phase-dot"></div>` : '';
+    const onclick = isFutureLock ? '' : `onclick="togglePeriodDay('${ds}')"`;
+
+    gridHTML += `<div class="${cls}" ${onclick}>
+      <span>${d}</span>${phDot}
+    </div>`;
+  }
+
+  return `
+    <p class="cal-month-label">${monthNames[month]} ${year}</p>
+    <div class="cal-weekday-row">${dayLabels.map(l => `<div class="cal-weekday">${l}</div>`).join('')}</div>
+    <div class="cal-grid">${gridHTML}</div>
+  `;
+}
+
+function renderCycle(app) {
+  const runs = getPeriodRuns(periodLog);
+  const logSet = new Set(periodLog);
+  const predictedSet = getPredictedDaySet(runs);
+  const today = todayKey();
+  const avgCycle = getAvgCycleLength(runs);
+  const avgDur = getAvgPeriodDuration(runs);
+  const daysLeft = getDaysUntilNext(runs);
+  const currentPhase = runs.length ? getPhaseForDate(today, runs) : null;
+  const isOnPeriod = logSet.has(today);
+
+  // Countdown copy
+  let countdownHTML = '';
+  if (!runs.length) {
+    countdownHTML = `
+      <div class="countdown-wrap">
+        <div class="countdown-msg">Start logging your period days<br>to unlock your cycle predictions, queen 🌙</div>
+      </div>`;
+  } else if (isOnPeriod) {
+    countdownHTML = `
+      <div class="countdown-wrap">
+        <div style="font-size:48px;line-height:1">🩸</div>
+        <div class="countdown-msg">You're in your era, babe —<br>rest, hydrate, and be as dramatic as needed</div>
+      </div>`;
+  } else {
+    const msgs = daysLeft === 1
+      ? "Tomorrow she arrives. Light the candles and warn everyone 🕯️"
+      : daysLeft <= 3
+        ? `${daysLeft} days and she's almost here, queen. Stock up and clear your schedule 👑`
+        : daysLeft <= 7
+          ? `${daysLeft} days until she shows up uninvited and runs the whole show 💅`
+          : daysLeft <= 14
+            ? `${daysLeft} days of pure unbothered energy left — you're glowing, babe ✨`
+            : daysLeft <= 21
+              ? `${daysLeft} days away. Manifest, move, and be magnificent 🦋`
+              : `${daysLeft} days until your body reminds everyone who's boss 👑`;
+    countdownHTML = `
+      <div class="countdown-wrap">
+        <div class="countdown-num">${daysLeft}</div>
+        <div class="countdown-unit">days until she arrives</div>
+        <div class="countdown-msg">${msgs}</div>
+      </div>`;
+  }
+
+  // Phase card copy
+  const phaseData = {
+    menstrual: {
+      name: 'The Arrival', emoji: '🩸', subtitle: 'Menstrual Phase',
+      desc: 'You\'re bleeding and still showing up. That\'s not weakness — that\'s power, babe.'
+    },
+    follicular: {
+      name: 'The Rise', emoji: '🌱', subtitle: 'Follicular Phase',
+      desc: 'Energy rising, skin glowing, ideas flowing — she\'s back and she means business.'
+    },
+    ovulation: {
+      name: 'The Peak', emoji: '✨', subtitle: 'Ovulation Phase',
+      desc: 'You are magnetic right now. The universe literally cannot ignore you. Walk accordingly.'
+    },
+    luteal: {
+      name: 'The Descent', emoji: '🌙', subtitle: 'Luteal Phase',
+      desc: 'Slow down without apology. Your body is doing serious behind-the-scenes work.'
+    }
+  };
+
+  const phaseHTML = (runs.length && currentPhase) ? (() => {
+    const p = phaseData[currentPhase];
+    return `
+      <section class="card card-shadow" style="animation-delay:0.18s">
+        <div class="phase-card-inner">
+          <div class="phase-emoji-big">${p.emoji}</div>
+          <div class="phase-card-text">
+            <p class="phase-subtitle">${p.subtitle}</p>
+            <p class="phase-name">${p.name}</p>
+            <p class="phase-desc">${p.desc}</p>
+          </div>
+        </div>
+      </section>`;
+  })() : '';
+
+  // Build 4 months: current + next 3
+  const now = new Date();
+  let monthsHTML = '';
+  for (let i = 0; i < 4; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    monthsHTML += `<section class="card" style="animation-delay:${0.22 + i * 0.06}s">
+      ${buildCalMonth(d.getFullYear(), d.getMonth(), logSet, predictedSet, runs)}
+      ${i === 3 ? `
+        <div class="cal-legend" style="margin-top:14px">
+          <div class="cal-legend-item"><div class="legend-dot period"></div> Period logged</div>
+          <div class="cal-legend-item"><div class="legend-dot predicted"></div> Estimated</div>
+          <div class="cal-legend-item"><div class="legend-dot today"></div> Today</div>
+        </div>
+        <div class="phase-legend" style="margin-top:10px">
+          <div class="phase-legend-item"><div class="phase-pip menstrual"></div> Menstrual</div>
+          <div class="phase-legend-item"><div class="phase-pip follicular"></div> Follicular</div>
+          <div class="phase-legend-item"><div class="phase-pip ovulation"></div> Ovulation</div>
+          <div class="phase-legend-item"><div class="phase-pip luteal"></div> Luteal</div>
+        </div>` : ''}
+    </section>`;
+  }
+
+  app.innerHTML = `
+    <nav class="nav">
+      <button class="nav-btn" onclick="switchView('today')">Today</button>
+      <button class="nav-btn" onclick="switchView('history')">Archive</button>
+      <button class="nav-btn" onclick="switchView('stats')">Stats</button>
+      <button class="nav-btn active" onclick="switchView('cycle')">Cycle</button>
+    </nav>
+    <header>
+      <div class="crown" style="font-size:28px">🌸</div>
+      <h1 class="greeting" style="font-size:clamp(26px,6vw,36px)">Your Cycle</h1>
+      <p class="subtitle">She runs on her own schedule, and that's the law ✦</p>
+    </header>
+
+    <section class="card card-accent" style="animation-delay:0.1s">
+      <span class="card-icon" style="top:10px;right:14px;font-size:24px;opacity:0.2">🌙</span>
+      ${countdownHTML}
+    </section>
+
+    ${phaseHTML}
+
+    ${monthsHTML}
+
+    <footer>Your body is the blueprint, queen. 🌸</footer>
+  `;
+}
+
 // ─── MOOD ───
 window.setMood = function(val) {
   todayData.mood = todayData.mood === val ? null : val;
@@ -1304,6 +1833,7 @@ function renderStats(app) {
       <button class="nav-btn" onclick="switchView('today')">Today</button>
       <button class="nav-btn" onclick="switchView('history')">Archive</button>
       <button class="nav-btn active" onclick="switchView('stats')">Stats</button>
+      <button class="nav-btn" onclick="switchView('cycle')">Cycle</button>
     </nav>
     <header>
       <div class="crown">✦</div>
