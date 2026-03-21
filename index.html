@@ -7,9 +7,10 @@
 <meta name="description" content="Daily agenda, habit tracker, journal & shadow work">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="My Agenda">
-<meta name="theme-color" content="#fdf0f4">
-<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkhlciBEYWlseSBBZ2VuZGEiLAogICJzaG9ydF9uYW1lIjogIkFnZW5kYSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmRmMGY0IiwKICAidGhlbWVfY29sb3IiOiAiI2ZkZjBmNCIKfQ==">
+<meta name="apple-mobile-web-app-title" content="Her Agenda">
+<meta name="theme-color" content="#d48aaa">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSGVyIERhaWx5IEFnZW5kYSIsInNob3J0X25hbWUiOiJBZ2VuZGEiLCJkZXNjcmlwdGlvbiI6IkRhaWx5IGhhYml0IHRyYWNrZXIsIGpvdXJuYWwgJiBjeWNsZSB0cmFja2VyIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZGYwZjQiLCJ0aGVtZV9jb2xvciI6IiNkNDhhYWEiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiY2F0ZWdvcmllcyI6WyJsaWZlc3R5bGUiLCJwcm9kdWN0aXZpdHkiXSwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTkyIDE5MiclM0UlM0NyZWN0IHdpZHRoPScxOTInIGhlaWdodD0nMTkyJyByeD0nMzgnIGZpbGw9JyUyM2ZkZjBmNCcvJTNFJTNDdGV4dCB4PSc5NicgeT0nMTM2JyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LXNpemU9JzEyMCclM0UlRjAlOUYlOTElOTElM0MvdGV4dCUzRSUzQy9zdmclM0UiLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifSx7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMiclM0UlM0NyZWN0IHdpZHRoPSc1MTInIGhlaWdodD0nNTEyJyByeD0nMTAwJyBmaWxsPSclMjNmZGYwZjQnLyUzRSUzQ3RleHQgeD0nMjU2JyB5PSczNzAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGZvbnQtc2l6ZT0nMzIwJyUzRSVGMCU5RiU5MSU5MSUzQy90ZXh0JTNFJTNDL3N2ZyUzRSIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIiwicHVycG9zZSI6ImFueSBtYXNrYWJsZSJ9XX0=">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23fdf0f4'/%3E%3Ctext x='90' y='128' text-anchor='middle' font-size='110'%3E%F0%9F%91%91%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -411,6 +412,37 @@
     font-family: 'Caveat', cursive; font-size: 20px; color: var(--pink-mid); font-weight: 500;
   }
 
+  /* Goal control */
+  .habit-goal-ctrl {
+    display: flex; align-items: center; gap: 5px;
+  }
+  .goal-btn {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid rgba(212,140,180,0.35);
+    background: rgba(255,255,255,0.5);
+    color: var(--pink-mid); font-size: 15px; line-height: 1;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; padding: 0;
+    transition: all 0.2s;
+  }
+  .goal-btn:hover { background: rgba(212,140,180,0.15); border-color: var(--pink-mid); }
+  .goal-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 700;
+    color: var(--text-muted); white-space: nowrap;
+    letter-spacing: 0.5px;
+  }
+
+  /* Partial habit state */
+  .habit-item.partial { background: rgba(255,255,255,0.25); border-color: rgba(212,140,180,0.2); }
+  .habit-item.partial .habit-check {
+    background: rgba(212,160,180,0.2);
+    border-color: var(--pink-soft);
+    color: var(--pink-mid);
+    font-size: 13px;
+  }
+  .habit-item.partial .habit-name { color: #b89aaa; font-style: italic; }
+
   /* Streak badge */
   .streak-badge {
     font-family: 'DM Sans', sans-serif;
@@ -444,6 +476,62 @@
     border-color: var(--pink-soft);
     box-shadow: 0 2px 10px rgba(212,138,170,0.25);
     transform: scale(1.15);
+  }
+
+  /* Streak card grid */
+  .streak-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .streak-card {
+    background: rgba(255,255,255,0.4);
+    border: 1.5px solid var(--pink-ghost);
+    border-radius: 16px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .streak-card-icon { font-size: 26px; margin-bottom: 6px; }
+  .streak-card-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px; font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.8px;
+    margin-bottom: 10px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .streak-card-now {
+    display: flex; align-items: baseline; justify-content: center; gap: 4px;
+  }
+  .streak-fire-em { font-size: 18px; line-height: 1; }
+  .streak-big-num {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 38px; font-weight: 800; line-height: 1;
+    background: linear-gradient(135deg, var(--pink-mid), var(--pink-pale));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .streak-big-unit {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    -webkit-text-fill-color: var(--text-muted);
+  }
+  .streak-card-best {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; color: var(--text-sub); margin-top: 6px;
+  }
+  .streak-bar-track {
+    height: 4px; border-radius: 2px;
+    background: rgba(212,160,180,0.15);
+    margin-top: 10px; overflow: hidden;
+  }
+  .streak-bar-fill {
+    height: 100%; border-radius: 2px;
+    background: linear-gradient(90deg, var(--pink-soft), var(--pink-pale));
+    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .streak-card-start {
+    font-family: 'Caveat', cursive;
+    font-size: 14px; color: var(--text-sub); margin-top: 6px;
   }
 
   /* Stats view */
@@ -1135,6 +1223,20 @@ function savePeriodLog(log) {
   } catch(e) {}
 }
 
+function loadHabitGoal() {
+  try {
+    const raw = localStorage.getItem('agenda_habit_goal');
+    if (raw !== null) return parseInt(raw, 10);
+  } catch(e) {}
+  return 4;
+}
+
+function saveHabitGoal(n) {
+  try {
+    localStorage.setItem('agenda_habit_goal', String(n));
+  } catch(e) {}
+}
+
 function getAllEntries() {
   const entries = [];
   try {
@@ -1157,6 +1259,7 @@ let habitConfig = loadHabitConfig();
 let todayData = loadToday() || { habits: {}, shadowAnswer: '', journalText: '', mood: null };
 let showAddHabit = false;
 let periodLog = loadPeriodLog(); // string[] of YYYY-MM-DD
+let habitGoal = loadHabitGoal(); // daily completion threshold (default 4)
 
 function save() {
   saveToday(todayData);
@@ -1284,7 +1387,7 @@ function computeStreak(habitId) {
   let streak = 0;
   let prev = null;
   for (const e of entries) {
-    if (!e.habits || !e.habits[habitId]) break;
+    if (!e.habits || Number(e.habits[habitId]) !== 1) break;
     if (prev !== null) {
       // Check consecutive day
       const prevDate = new Date(prev + 'T00:00:00');
@@ -1303,7 +1406,7 @@ function getBestStreak(habitId) {
   const ascending = [...entries].reverse();
   let best = 0, cur = 0, prev = null;
   for (const e of ascending) {
-    if (e.habits && e.habits[habitId]) {
+    if (e.habits && Number(e.habits[habitId]) === 1) {
       if (prev !== null) {
         const prevDate = new Date(prev + 'T00:00:00');
         const curDate = new Date(e.date + 'T00:00:00');
@@ -1336,9 +1439,12 @@ function renderToday(app) {
   const affirmation = AFFIRMATIONS[dy % AFFIRMATIONS.length];
   const fact = FUN_FACTS[dy % FUN_FACTS.length];
   const shadowQ = SHADOW_WORK[dy % SHADOW_WORK.length];
-  const completed = habitConfig.filter(h => todayData.habits[h.id]).length;
   const total = habitConfig.length;
-  const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+  const completedWeight = habitConfig.reduce((s, h) => s + (Number(todayData.habits[h.id]) || 0), 0);
+  const completedFull = habitConfig.filter(h => Number(todayData.habits[h.id]) === 1).length;
+  const effectiveGoal = Math.max(1, Math.min(habitGoal, total));
+  const pct = total > 0 ? Math.min(100, Math.round((completedWeight / effectiveGoal) * 100)) : 0;
+  const goalReached = completedWeight >= effectiveGoal;
 
   const moodEmojis = ['😔','😕','😐','🙂','😊'];
   const moodLabels = ['rough','meh','okay','good','great'];
@@ -1381,16 +1487,23 @@ function renderToday(app) {
       <div class="habit-header">
         <div>
           <p class="section-label">Habit Tracker</p>
-          <p class="habit-count">${completed} of ${total} slayed</p>
+          <p class="habit-count">${completedWeight % 1 === 0 ? completedWeight : completedWeight.toFixed(1)} / ${effectiveGoal} goal &nbsp;·&nbsp; ${total} total</p>
         </div>
-        <div class="habit-pct ${pct === 100 ? 'done' : ''}">${pct}%</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="habit-goal-ctrl">
+            <button class="goal-btn" onclick="adjustHabitGoal(-1)">−</button>
+            <span class="goal-label">Goal: ${effectiveGoal}</span>
+            <button class="goal-btn" onclick="adjustHabitGoal(1)">+</button>
+          </div>
+          <div class="habit-pct ${goalReached ? 'done' : ''}">${pct}%</div>
+        </div>
       </div>
       <div class="progress-track">
-        <div class="progress-fill ${pct === 100 ? 'done' : ''}" style="width:${pct}%"></div>
+        <div class="progress-fill ${goalReached ? 'done' : ''}" style="width:${pct}%"></div>
       </div>
       <div id="habit-list"></div>
       <div id="add-habit-area"></div>
-      ${pct === 100 ? '<div class="completion-msg">All habits slayed — you ate and left no crumbs 💅✨</div>' : ''}
+      ${goalReached ? '<div class="completion-msg">Daily goal slayed — you ate and left no crumbs 💅✨</div>' : ''}
       ${(() => {
         const milestoneHabits = habitConfig.map(h => ({ h, s: computeStreak(h.id) })).filter(x => [7,14,21,30].includes(x.s));
         if (!milestoneHabits.length) return '';
@@ -1431,14 +1544,16 @@ function renderToday(app) {
   // Render habits
   const habitList = document.getElementById('habit-list');
   habitConfig.forEach((h, i) => {
-    const checked = todayData.habits[h.id];
+    const val = Number(todayData.habits[h.id]) || 0; // 0, 0.5, or 1
+    const isDone = val === 1;
+    const isPartial = val === 0.5;
     const streak = computeStreak(h.id);
     const streakBadge = streak >= 2 ? `<span class="streak-badge">🔥 ${streak}</span>` : '';
     const div = document.createElement('div');
-    div.className = 'habit-item' + (checked ? ' checked' : '');
+    div.className = 'habit-item' + (isDone ? ' checked' : isPartial ? ' partial' : '');
     div.style.animationDelay = (i * 0.05) + 's';
     div.innerHTML = `
-      <div class="habit-check">${checked ? '✓' : ''}</div>
+      <div class="habit-check">${isDone ? '✓' : isPartial ? '~' : ''}</div>
       <span class="habit-icon">${h.icon}</span>
       <span class="habit-name">${h.name}</span>
       ${streakBadge}
@@ -1446,7 +1561,9 @@ function renderToday(app) {
     `;
     div.addEventListener('click', (e) => {
       if (e.target.classList.contains('habit-remove')) return;
-      todayData.habits[h.id] = !todayData.habits[h.id];
+      // Cycle: 0 → 0.5 → 1 → 0
+      const cur = Number(todayData.habits[h.id]) || 0;
+      todayData.habits[h.id] = cur === 0 ? 0.5 : cur === 0.5 ? 1 : 0;
       save();
       render();
     });
@@ -1785,6 +1902,13 @@ function renderCycle(app) {
   `;
 }
 
+// ─── HABIT GOAL ───
+window.adjustHabitGoal = function(delta) {
+  habitGoal = Math.max(1, Math.min(habitGoal + delta, habitConfig.length));
+  saveHabitGoal(habitGoal);
+  render();
+};
+
 // ─── MOOD ───
 window.setMood = function(val) {
   todayData.mood = todayData.mood === val ? null : val;
@@ -1893,33 +2017,32 @@ function renderStats(app) {
     <!-- Habit Streaks -->
     <section class="card" style="animation-delay:0.2s">
       <p class="section-label">Habit Streaks</p>
-      <div id="streak-list"></div>
-      ${habitConfig.length === 0 ? '<p style="text-align:center;color:var(--text-muted);font-family:\'DM Sans\',sans-serif;font-size:14px">No habits yet — add some!</p>' : ''}
+      ${habitConfig.length === 0
+        ? '<p style="text-align:center;color:var(--text-muted);font-family:\'DM Sans\',sans-serif;font-size:14px;padding:10px 0">No habits yet — add some!</p>'
+        : `<div class="streak-grid">${habitConfig.map(h => {
+            const cur = computeStreak(h.id);
+            const best = getBestStreak(h.id);
+            const barPct = best > 0 ? Math.round((cur / best) * 100) : 0;
+            return `<div class="streak-card">
+              <div class="streak-card-icon">${h.icon}</div>
+              <div class="streak-card-name">${h.name}</div>
+              ${cur === 0 && best === 0
+                ? `<div class="streak-card-start">Start your streak! 🌱</div>`
+                : `<div class="streak-card-now">
+                    <span class="streak-fire-em">🔥</span>
+                    <span class="streak-big-num">${cur}</span>
+                    <span class="streak-big-unit">days</span>
+                  </div>
+                  <div class="streak-card-best">Best: ${best} days ⭐</div>
+                  <div class="streak-bar-track"><div class="streak-bar-fill" style="width:${barPct}%"></div></div>`
+              }
+            </div>`;
+          }).join('')}</div>`
+      }
     </section>
 
     <footer>Keep going. The data doesn't lie. 👑</footer>
   `;
-
-  const streakList = document.getElementById('streak-list');
-  if (streakList) {
-    habitConfig.forEach(h => {
-      const cur = computeStreak(h.id);
-      const best = getBestStreak(h.id);
-      const row = document.createElement('div');
-      row.className = 'stat-row';
-      row.innerHTML = `
-        <div class="stat-row-left">
-          <span>${h.icon}</span>
-          <span>${h.name}</span>
-        </div>
-        <div class="stat-row-right">
-          <span class="stat-fire">🔥 ${cur} now</span>
-          <span>⭐ ${best} best</span>
-        </div>
-      `;
-      streakList.appendChild(row);
-    });
-  }
 }
 
 // ─── NAV ───
@@ -1936,6 +2059,43 @@ document.addEventListener('visibilitychange', () => {
 
 // ─── INIT ───
 render();
+
+// ─── PWA SERVICE WORKER (inline via Blob URL) ───
+// Registers a caching service worker so the app works offline and
+// satisfies the PWA installability criteria on Android/Chrome.
+// iOS Safari uses the apple-mobile-web-app-capable meta tag instead.
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'her-agenda-v2';
+    self.addEventListener('install', e => {
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(caches.keys().then(keys =>
+        Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      ));
+    });
+    self.addEventListener('fetch', e => {
+      if (e.request.method !== 'GET') return;
+      e.respondWith(
+        caches.open(CACHE).then(cache =>
+          cache.match(e.request).then(cached => {
+            const fresh = fetch(e.request).then(r => {
+              if (r && r.status === 200) cache.put(e.request, r.clone());
+              return r;
+            }).catch(() => cached);
+            return cached || fresh;
+          })
+        )
+      );
+    });
+  `;
+  try {
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).catch(() => {});
+  } catch(e) {}
+}
 </script>
 </body>
 </html
