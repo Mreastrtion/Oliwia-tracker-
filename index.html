@@ -2105,10 +2105,10 @@ function renderCycle(app) {
       </section>`;
   })() : '';
 
-  // Build 4 months: current + next 3
+  // Build 7 months: 3 past + current + next 3
   const now = new Date();
   let monthsHTML = '';
-  for (let i = 0; i < 4; i++) {
+  for (let i = -3; i < 4; i++) {
     const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
     monthsHTML += `<section class="card" style="animation-delay:${0.22 + i * 0.06}s">
       ${buildCalMonth(d.getFullYear(), d.getMonth(), logSet, predictedSet, runs)}
