@@ -866,6 +866,25 @@
   }
   .lang-btn:hover:not(.active) { border-color: rgba(212,140,180,0.4); color: var(--pink-mid); }
   .lang-sep { color: var(--text-muted); font-size: 11px; font-family: 'DM Sans', sans-serif; }
+  .partner-code-banner {
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-sub);
+    margin: -8px 16px 16px;
+  }
+  .code-pill-inline {
+    display: inline-block;
+    background: rgba(212,140,180,0.15);
+    border: 1px solid var(--pink-mid);
+    border-radius: 10px;
+    padding: 2px 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--pink-mid);
+    cursor: pointer;
+    font-size: 13px;
+  }
   .cal-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -1144,6 +1163,10 @@ const TRANSLATIONS = {
     footer_today:'She believed she could, so she did. 👑',
     footer_archive:'Every page of your story matters. 👑',
     footer_cycle:'Your body is the blueprint, queen. 🌸',
+    nav_partner:'Partner',
+    partner_preview_header:"Your partner's view 💕",
+    partner_preview_hint:'This is exactly what he sees in real-time.',
+    partner_no_code_hint:'Generate a couple code first so you can share your link with him.',
     footer_stats:"Keep going. The data doesn't lie. 👑",
     cycle_start_logging:'Start logging your period days<br>to unlock your cycle predictions, queen 🌙',
     cycle_on_period:"You're in your era, babe —<br>rest, hydrate, and be as dramatic as needed",
@@ -1216,6 +1239,10 @@ const TRANSLATIONS = {
     footer_today:'İnandı ve yaptı. 👑',
     footer_archive:'Hikayenin her sayfası önemli. 👑',
     footer_cycle:'Vücudun senin şablonun, kraliçem. 🌸',
+    nav_partner:'Partner',
+    partner_preview_header:'Partnerinin görünümü 💕',
+    partner_preview_hint:'O tam olarak bunu gerçek zamanlı görüyor.',
+    partner_no_code_hint:'Önce bir çift kodu oluştur, ardından bağlantını onunla paylaş.',
     footer_stats:'Devam et. Veriler yalan söylemez. 👑',
     cycle_start_logging:'Döngü tahminlerini açmak için<br>adet günlerini kaydetmeye başla, kraliçem 🌙',
     cycle_on_period:'Bu senin dönemin —<br>dinlen, su iç ve istediğin kadar dramatik ol',
@@ -2157,6 +2184,7 @@ function render() {
   if (currentView === 'today') renderToday(app);
   else if (currentView === 'history') renderHistory(app);
   else if (currentView === 'stats') renderStats(app);
+  else if (currentView === 'partner') renderPartnerTab(app);
   else renderCycle(app);
 }
 
@@ -2184,6 +2212,7 @@ function renderToday(app) {
       <button class="nav-btn" onclick="switchView('history')">${t('nav_archive')}</button>
       <button class="nav-btn" onclick="switchView('stats')">${t('nav_stats')}</button>
       <button class="nav-btn" onclick="switchView('cycle')">${t('nav_cycle')}</button>
+      <button class="nav-btn" onclick="switchView('partner')">${t('nav_partner')}</button>
     </nav>
     ${langRowHTML()}
 
@@ -2381,6 +2410,7 @@ function renderHistory(app) {
       <button class="nav-btn active" onclick="switchView('history')">${t('nav_archive')}</button>
       <button class="nav-btn" onclick="switchView('stats')">${t('nav_stats')}</button>
       <button class="nav-btn" onclick="switchView('cycle')">${t('nav_cycle')}</button>
+      <button class="nav-btn" onclick="switchView('partner')">${t('nav_partner')}</button>
     </nav>
     ${langRowHTML()}
     <header>
@@ -2629,6 +2659,7 @@ function renderCycle(app) {
       <button class="nav-btn" onclick="switchView('history')">${t('nav_archive')}</button>
       <button class="nav-btn" onclick="switchView('stats')">${t('nav_stats')}</button>
       <button class="nav-btn active" onclick="switchView('cycle')">${t('nav_cycle')}</button>
+      <button class="nav-btn" onclick="switchView('partner')">${t('nav_partner')}</button>
     </nav>
     ${langRowHTML()}
     <header>
@@ -2719,6 +2750,7 @@ function renderStats(app) {
       <button class="nav-btn" onclick="switchView('history')">${t('nav_archive')}</button>
       <button class="nav-btn active" onclick="switchView('stats')">${t('nav_stats')}</button>
       <button class="nav-btn" onclick="switchView('cycle')">${t('nav_cycle')}</button>
+      <button class="nav-btn" onclick="switchView('partner')">${t('nav_partner')}</button>
     </nav>
     ${langRowHTML()}
     <header>
@@ -2805,6 +2837,140 @@ function renderStats(app) {
 }
 
 // ─── PARTNER VIEW ───
+function renderPartnerTab(app) {
+  // Same metadata as renderPartner — local preview using owner's own data
+  const moodEmojis = ['😔','😕','😐','🙂','😊'];
+  const moodLabels = ['Rough','Meh','Okay','Good','Great'];
+  const moodTips = [
+    "She's having a rough one. Ask what she needs — then actually do it.",
+    "She's feeling off. A small gesture goes a long way today.",
+    "She's steady. Keep the vibe calm and positive.",
+    "She's feeling good — a great time to connect.",
+    "She's thriving. Match her energy and celebrate her.",
+  ];
+  const phaseMeta = {
+    menstrual: {
+      icon: '🩸', name: 'Menstrual', sub: 'The Rest Phase',
+      tips: [
+        'Heat pad, her favourite snacks, and zero demands — be the hero today.',
+        "Don't take it personally if she's extra. Her body is working overtime.",
+        'Ask what she needs, then actually do it. Just show up.',
+      ],
+    },
+    follicular: {
+      icon: '🌱', name: 'Follicular', sub: 'The Rise',
+      tips: [
+        "Her energy is climbing — she's full of ideas and momentum.",
+        'Great time for dates, deep conversations, and making plans together.',
+        "She's feeling herself. Match her energy and be present.",
+      ],
+    },
+    ovulation: {
+      icon: '✨', name: 'Ovulation', sub: 'The Peak',
+      tips: [
+        'She is literally glowing right now. Be there for it.',
+        'Best window for quality time, special gestures, and real connection.',
+        "She's at her most confident — hype her up, king.",
+      ],
+    },
+    luteal: {
+      icon: '🌙', name: 'Luteal', sub: 'The Descent',
+      tips: [
+        'She may need more patience and less noise from you this week.',
+        "Not difficult — her body is preparing. Be her soft landing.",
+        'Comfort over everything. Fewer plans, more presence.',
+      ],
+    },
+  };
+
+  const runs       = getPeriodRuns(periodLog);
+  const today      = todayKey();
+  const mood       = todayData.mood || null;
+  const phase      = runs.length ? getPhaseForDate(today, runs) : null;
+  const isOnPeriod = new Set(periodLog).has(today);
+  const daysUntilNext = getDaysUntilNext(runs);
+  const pm = phase && phaseMeta[phase] ? phaseMeta[phase] : null;
+
+  const moodCard = mood ? `
+    <div class="partner-card">
+      <p class="partner-card-label">Her mood today</p>
+      <span class="partner-mood-emoji">${moodEmojis[mood - 1]}</span>
+      <p class="partner-mood-label">Feeling ${moodLabels[mood - 1]}</p>
+      <p class="partner-mood-tip">${moodTips[mood - 1]}</p>
+    </div>` : '';
+
+  const periodCard = isOnPeriod ? `
+    <div class="partner-card partner-period-banner">
+      <p class="partner-card-label">Right now</p>
+      <p class="partner-period-title">🩸 She's on her period</p>
+      <ul class="partner-tips" style="margin-top:12px">
+        <li>Heat pad, her favourite snacks, and zero demands — be the hero today.</li>
+        <li>Don't take it personally if she's extra. Her body is working overtime.</li>
+        <li>Ask what she needs, then actually do it. Just show up.</li>
+      </ul>
+    </div>` : '';
+
+  const phaseCard = pm ? `
+    <div class="partner-card">
+      <p class="partner-card-label">Her cycle phase</p>
+      <p class="partner-phase-name">${pm.icon} ${pm.name}</p>
+      <p class="partner-phase-sub">${pm.sub}</p>
+      <ul class="partner-tips">
+        ${pm.tips.map(tip => `<li>${tip}</li>`).join('')}
+      </ul>
+    </div>` : '';
+
+  const daysCard = daysUntilNext !== null && daysUntilNext !== undefined ? `
+    <div class="partner-card">
+      <p class="partner-card-label">Period countdown</p>
+      <div class="partner-days-badge">
+        <strong>${daysUntilNext === 0 ? '!' : daysUntilNext}</strong>
+        ${daysUntilNext === 0 ? 'Period expected today' : daysUntilNext === 1 ? 'day until her next period' : 'days until her next period'}
+      </div>
+    </div>` : '';
+
+  const hasData = mood || phase || isOnPeriod;
+
+  app.innerHTML = `
+    <nav class="nav">
+      <button class="nav-btn" onclick="switchView('today')">${t('nav_today')}</button>
+      <button class="nav-btn" onclick="switchView('history')">${t('nav_archive')}</button>
+      <button class="nav-btn" onclick="switchView('stats')">${t('nav_stats')}</button>
+      <button class="nav-btn" onclick="switchView('cycle')">${t('nav_cycle')}</button>
+      <button class="nav-btn active" onclick="switchView('partner')">${t('nav_partner')}</button>
+    </nav>
+    ${langRowHTML()}
+
+    <header>
+      <div class="crown">💕</div>
+      <h1 class="greeting" style="font-size:clamp(24px,5.5vw,32px)">${t('partner_preview_header')}</h1>
+      <p class="subtitle">${t('partner_preview_hint')}</p>
+    </header>
+
+    ${!coupleCode ? `
+      <div class="partner-connect-card">
+        <p class="partner-connect-hint">${t('partner_no_code_hint')}</p>
+        <button class="partner-generate-btn" onclick="window.partnerGenCode()">${t('partner_generate')}</button>
+      </div>` : `
+      <div class="partner-code-banner">
+        ${t('label_partner_link')}:
+        <span class="code-pill-inline" onclick="window.partnerCopyCode('${coupleCode}')">${coupleCode}</span>
+      </div>`}
+
+    ${!hasData ? `
+      <div class="partner-view-wrap" style="margin-top:0">
+        <div class="partner-no-data">Set your mood or log a cycle day to see the partner preview 🌸</div>
+      </div>` : `
+      <div class="partner-view-wrap" style="margin-top:0">
+        <div class="partner-cards">
+          ${moodCard}${periodCard}${phaseCard}${daysCard}
+        </div>
+      </div>`}
+
+    <footer>${t('footer_today')}</footer>
+  `;
+}
+
 function renderPartner(app, code) {
   const moodEmojis  = ['😔','😕','😐','🙂','😊'];
   const moodLabels  = ['Rough','Meh','Okay','Good','Great'];
