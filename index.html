@@ -807,6 +807,38 @@
     text-align: center;
     padding: 4px 0;
   }
+  .cal-nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .cal-nav-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--pink-mid);
+  }
+  .cal-nav-btn {
+    background: none;
+    border: 1px solid rgba(212,140,180,0.3);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 22px;
+    color: var(--pink-mid);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    line-height: 1;
+    padding: 0;
+  }
+  .cal-nav-btn:hover:not(:disabled) { background: rgba(212,140,180,0.12); }
+  .cal-nav-btn:disabled { opacity: 0.25; cursor: default; }
   .cal-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -1461,6 +1493,7 @@ let habitConfig = loadHabitConfig();
 let todayData = loadToday() || { habits: {}, shadowAnswer: '', journalText: '', mood: null };
 let showAddHabit = false;
 let periodLog = loadPeriodLog(); // string[] of YYYY-MM-DD
+let cycleMonthOffset = 0; // -3 to +3, resets to current month on page load
 let habitGoal = loadHabitGoal(); // daily completion threshold (default 4)
 let coupleCode = loadCoupleCode(); // 6-char partner sync code, null if not set
 
@@ -1967,6 +2000,11 @@ function renderHistory(app) {
 }
 
 // ─── CYCLE / PERIOD ───
+window.changeCycleMonth = function(delta) {
+  cycleMonthOffset = Math.max(-3, Math.min(3, cycleMonthOffset + delta));
+  render();
+};
+
 window.togglePeriodDay = function(dateStr) {
   const idx = periodLog.indexOf(dateStr);
   if (idx === -1) periodLog.push(dateStr);
@@ -1975,7 +2013,7 @@ window.togglePeriodDay = function(dateStr) {
   render();
 };
 
-function buildCalMonth(year, month, logSet, predictedSet, runs) {
+function buildCalMonth(year, month, logSet, predictedSet, runs, hideLabel) {
   // month is 0-indexed
   const today = todayKey();
   const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -2020,7 +2058,7 @@ function buildCalMonth(year, month, logSet, predictedSet, runs) {
   }
 
   return `
-    <p class="cal-month-label">${monthNames[month]} ${year}</p>
+    ${hideLabel ? '' : `<p class="cal-month-label">${monthNames[month]} ${year}</p>`}
     <div class="cal-weekday-row">${dayLabels.map(l => `<div class="cal-weekday">${l}</div>`).join('')}</div>
     <div class="cal-grid">${gridHTML}</div>
   `;
@@ -2105,27 +2143,29 @@ function renderCycle(app) {
       </section>`;
   })() : '';
 
-  // Build 7 months: 3 past + current + next 3
+  // Single month with prev/next navigation
   const now = new Date();
-  let monthsHTML = '';
-  for (let i = -3; i < 4; i++) {
-    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
-    monthsHTML += `<section class="card" style="animation-delay:${0.22 + i * 0.06}s">
-      ${buildCalMonth(d.getFullYear(), d.getMonth(), logSet, predictedSet, runs)}
-      ${i === 3 ? `
-        <div class="cal-legend" style="margin-top:14px">
-          <div class="cal-legend-item"><div class="legend-dot period"></div> Period logged</div>
-          <div class="cal-legend-item"><div class="legend-dot predicted"></div> Estimated</div>
-          <div class="cal-legend-item"><div class="legend-dot today"></div> Today</div>
-        </div>
-        <div class="phase-legend" style="margin-top:10px">
-          <div class="phase-legend-item"><div class="phase-pip menstrual"></div> Menstrual</div>
-          <div class="phase-legend-item"><div class="phase-pip follicular"></div> Follicular</div>
-          <div class="phase-legend-item"><div class="phase-pip ovulation"></div> Ovulation</div>
-          <div class="phase-legend-item"><div class="phase-pip luteal"></div> Luteal</div>
-        </div>` : ''}
-    </section>`;
-  }
+  const d = new Date(now.getFullYear(), now.getMonth() + cycleMonthOffset, 1);
+  const navMonthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const monthsHTML = `<section class="card" style="animation-delay:0.22s">
+    <div class="cal-nav-row">
+      <button class="cal-nav-btn" onclick="changeCycleMonth(-1)" ${cycleMonthOffset <= -3 ? 'disabled' : ''}>&#8249;</button>
+      <span class="cal-nav-label">${navMonthNames[d.getMonth()]} ${d.getFullYear()}</span>
+      <button class="cal-nav-btn" onclick="changeCycleMonth(1)" ${cycleMonthOffset >= 3 ? 'disabled' : ''}>&#8250;</button>
+    </div>
+    ${buildCalMonth(d.getFullYear(), d.getMonth(), logSet, predictedSet, runs, true)}
+    <div class="cal-legend" style="margin-top:14px">
+      <div class="cal-legend-item"><div class="legend-dot period"></div> Period logged</div>
+      <div class="cal-legend-item"><div class="legend-dot predicted"></div> Estimated</div>
+      <div class="cal-legend-item"><div class="legend-dot today"></div> Today</div>
+    </div>
+    <div class="phase-legend" style="margin-top:10px">
+      <div class="phase-legend-item"><div class="phase-pip menstrual"></div> Menstrual</div>
+      <div class="phase-legend-item"><div class="phase-pip follicular"></div> Follicular</div>
+      <div class="phase-legend-item"><div class="phase-pip ovulation"></div> Ovulation</div>
+      <div class="phase-legend-item"><div class="phase-pip luteal"></div> Luteal</div>
+    </div>
+  </section>`;
 
   app.innerHTML = `
     <nav class="nav">
