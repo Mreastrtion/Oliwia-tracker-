@@ -12,6 +12,8 @@
 <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSGVyIERhaWx5IEFnZW5kYSIsInNob3J0X25hbWUiOiJBZ2VuZGEiLCJkZXNjcmlwdGlvbiI6IkRhaWx5IGhhYml0IHRyYWNrZXIsIGpvdXJuYWwgJiBjeWNsZSB0cmFja2VyIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmZGYwZjQiLCJ0aGVtZV9jb2xvciI6IiNkNDhhYWEiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiY2F0ZWdvcmllcyI6WyJsaWZlc3R5bGUiLCJwcm9kdWN0aXZpdHkiXSwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTkyIDE5MiclM0UlM0NyZWN0IHdpZHRoPScxOTInIGhlaWdodD0nMTkyJyByeD0nMzgnIGZpbGw9JyUyM2ZkZjBmNCcvJTNFJTNDdGV4dCB4PSc5NicgeT0nMTM2JyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LXNpemU9JzEyMCclM0UlRjAlOUYlOTElOTElM0MvdGV4dCUzRSUzQy9zdmclM0UiLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifSx7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMiclM0UlM0NyZWN0IHdpZHRoPSc1MTInIGhlaWdodD0nNTEyJyByeD0nMTAwJyBmaWxsPSclMjNmZGYwZjQnLyUzRSUzQ3RleHQgeD0nMjU2JyB5PSczNzAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGZvbnQtc2l6ZT0nMzIwJyUzRSVGMCU5RiU5MSU5MSUzQy90ZXh0JTNFJTNDL3N2ZyUzRSIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIiwicHVycG9zZSI6ImFueSBtYXNrYWJsZSJ9XX0=">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23fdf0f4'/%3E%3Ctext x='90' y='128' text-anchor='middle' font-size='110'%3E%F0%9F%91%91%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@400;500;600;700&family=Caveat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -410,6 +412,156 @@
   footer {
     text-align: center; padding: 16px 0 24px;
     font-family: 'Caveat', cursive; font-size: 20px; color: var(--pink-mid); font-weight: 500;
+  }
+
+  /* Partner Connect card (her view) */
+  .partner-connect-card {
+    background: linear-gradient(135deg, rgba(212,138,170,0.15), rgba(180,100,140,0.08));
+    border: 1px solid rgba(212,138,170,0.3);
+    border-radius: 20px; padding: 20px 20px 16px; margin-bottom: 16px;
+    animation: fadeUp 0.4s ease both; animation-delay: 0.35s;
+  }
+  .partner-connect-card .section-label { margin-bottom: 6px; }
+  .partner-connect-hint {
+    font-family: 'Caveat', cursive; font-size: 15px; color: var(--text-sub);
+    margin-bottom: 14px; line-height: 1.4;
+  }
+  .code-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--pink-soft); color: #fff; font-family: 'DM Sans', sans-serif;
+    font-size: 22px; font-weight: 700; letter-spacing: 4px;
+    padding: 10px 18px; border-radius: 14px; margin-bottom: 12px;
+    user-select: all; cursor: pointer;
+  }
+  .code-pill-copy { font-size: 14px; letter-spacing: 0; opacity: 0.85; }
+  .partner-share-row {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+  .partner-share-btn {
+    flex: 1; min-width: 120px; padding: 10px 14px;
+    background: var(--pink-soft); color: #fff;
+    border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.15s;
+  }
+  .partner-share-btn:active { opacity: 0.7; }
+  .partner-share-btn.secondary {
+    background: transparent; border: 1.5px solid var(--pink-soft); color: var(--pink-soft);
+  }
+  .partner-generate-btn {
+    width: 100%; padding: 12px; border: none; border-radius: 14px;
+    background: var(--pink-soft); color: #fff;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .partner-generate-btn:active { opacity: 0.7; }
+
+  /* Partner view (his view) */
+  .partner-view-wrap {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #1a0d1e 0%, #2d1533 50%, #1e0e25 100%);
+    padding: 0 0 40px;
+  }
+  .partner-header {
+    text-align: center; padding: 48px 24px 24px;
+  }
+  .partner-crown { font-size: 40px; margin-bottom: 8px; }
+  .partner-title {
+    font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 600;
+    color: #f0c8dc; margin-bottom: 4px;
+  }
+  .partner-subtitle {
+    font-family: 'Caveat', cursive; font-size: 16px; color: rgba(240,200,220,0.6);
+  }
+  .partner-meta {
+    font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(240,200,220,0.45);
+    margin-top: 8px;
+  }
+  .partner-cards { padding: 0 16px; display: flex; flex-direction: column; gap: 16px; }
+  .partner-card {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(240,180,210,0.15);
+    border-radius: 22px; padding: 22px 20px; backdrop-filter: blur(10px);
+  }
+  .partner-card-label {
+    font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; color: rgba(240,180,210,0.5);
+    margin-bottom: 12px;
+  }
+  .partner-mood-emoji { font-size: 52px; display: block; text-align: center; margin-bottom: 8px; }
+  .partner-mood-label {
+    font-family: 'Playfair Display', serif; font-size: 22px; color: #f0c8dc;
+    text-align: center; margin-bottom: 8px; font-style: italic;
+  }
+  .partner-mood-tip {
+    font-family: 'Caveat', cursive; font-size: 16px; color: rgba(240,200,220,0.75);
+    text-align: center; line-height: 1.5;
+  }
+  .partner-phase-name {
+    font-family: 'Playfair Display', serif; font-size: 20px; color: #f0c8dc;
+    margin-bottom: 4px; font-weight: 600;
+  }
+  .partner-phase-sub {
+    font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(240,180,210,0.5);
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .partner-tips { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .partner-tips li {
+    font-family: 'Caveat', cursive; font-size: 16px; color: rgba(240,200,220,0.8);
+    padding-left: 18px; position: relative; line-height: 1.5;
+  }
+  .partner-tips li::before { content: '✦'; position: absolute; left: 0; color: var(--pink-soft); font-size: 11px; top: 3px; }
+  .partner-period-banner {
+    background: linear-gradient(135deg, rgba(180,40,80,0.25), rgba(140,20,60,0.15));
+    border-color: rgba(220,80,120,0.3) !important;
+  }
+  .partner-period-title {
+    font-family: 'Playfair Display', serif; font-size: 20px; color: #f0a0b8;
+    margin-bottom: 4px; font-weight: 600;
+  }
+  .partner-days-badge {
+    display: inline-block; background: rgba(240,180,210,0.12); border-radius: 12px;
+    padding: 10px 18px; text-align: center;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: rgba(240,200,220,0.7);
+    width: 100%;
+  }
+  .partner-days-badge strong { display: block; font-size: 28px; color: #f0c8dc; font-weight: 700; }
+  .partner-empty {
+    text-align: center; padding: 60px 24px;
+    font-family: 'Caveat', cursive; font-size: 20px; color: rgba(240,200,220,0.5);
+    line-height: 1.6;
+  }
+  .partner-code-entry {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(240,180,210,0.2);
+    border-radius: 22px; padding: 32px 24px; margin: 24px 16px;
+  }
+  .partner-code-entry h2 {
+    font-family: 'Playfair Display', serif; font-size: 22px; color: #f0c8dc;
+    margin-bottom: 8px; font-style: italic;
+  }
+  .partner-code-entry p {
+    font-family: 'Caveat', cursive; font-size: 16px; color: rgba(240,200,220,0.6);
+    margin-bottom: 20px; line-height: 1.5;
+  }
+  .partner-code-input {
+    width: 100%; padding: 14px 16px; border-radius: 14px;
+    border: 1.5px solid rgba(212,138,170,0.4);
+    background: rgba(255,255,255,0.05); color: #f0c8dc;
+    font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 700;
+    letter-spacing: 4px; text-transform: uppercase; text-align: center;
+    outline: none; margin-bottom: 12px;
+  }
+  .partner-code-input::placeholder { color: rgba(240,200,220,0.25); letter-spacing: 2px; font-size: 14px; }
+  .partner-code-submit {
+    width: 100%; padding: 14px; border: none; border-radius: 14px;
+    background: var(--pink-soft); color: #fff;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .partner-code-submit:active { opacity: 0.7; }
+  .partner-no-data {
+    background: rgba(255,255,255,0.04); border: 1px dashed rgba(240,180,210,0.15);
+    border-radius: 22px; padding: 32px 20px; text-align: center;
+    font-family: 'Caveat', cursive; font-size: 18px; color: rgba(240,200,220,0.45);
+    line-height: 1.6;
   }
 
   /* Goal control */
@@ -1221,6 +1373,7 @@ function savePeriodLog(log) {
   try {
     localStorage.setItem('agenda_period_log', JSON.stringify(log));
   } catch(e) {}
+  syncToPartner();
 }
 
 function loadHabitGoal() {
@@ -1253,6 +1406,55 @@ function getAllEntries() {
   return entries;
 }
 
+// ─── FIREBASE CONFIG ───
+// ⚙️  SETUP (one-time, ~5 min):
+//   1. Go to console.firebase.google.com and create a free project (Spark plan)
+//   2. Add a Web App → copy the firebaseConfig object and paste it below
+//   3. Go to Realtime Database → Create Database → Start in test mode
+//   4. Done — partner sync will work automatically.
+const FIREBASE_CONFIG = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+function _isFirebaseReady() {
+  return typeof firebase !== 'undefined'
+    && FIREBASE_CONFIG.apiKey
+    && FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY';
+}
+
+let _fbApp = null;
+function _initFb() {
+  if (_fbApp || !_isFirebaseReady()) return false;
+  try {
+    _fbApp = firebase.apps.length
+      ? firebase.apps[0]
+      : firebase.initializeApp(FIREBASE_CONFIG);
+    return true;
+  } catch(e) { return false; }
+}
+
+// ─── COUPLE CODE STORAGE ───
+function loadCoupleCode() {
+  try { return localStorage.getItem('agenda_couple_code') || null; } catch(e) { return null; }
+}
+function saveCoupleCode(code) {
+  try { localStorage.setItem('agenda_couple_code', code); } catch(e) {} }
+
+function generateCoupleCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  coupleCode = code;
+  saveCoupleCode(code);
+  return code;
+}
+
 // ─── STATE ───
 let currentView = 'today'; // 'today' | 'history' | 'stats'
 let habitConfig = loadHabitConfig();
@@ -1260,9 +1462,30 @@ let todayData = loadToday() || { habits: {}, shadowAnswer: '', journalText: '', 
 let showAddHabit = false;
 let periodLog = loadPeriodLog(); // string[] of YYYY-MM-DD
 let habitGoal = loadHabitGoal(); // daily completion threshold (default 4)
+let coupleCode = loadCoupleCode(); // 6-char partner sync code, null if not set
+
+function syncToPartner() {
+  if (!coupleCode || !_isFirebaseReady()) return;
+  if (!_initFb()) return;
+  try {
+    const runs = getPeriodRuns(periodLog);
+    const today = todayKey();
+    const phase = runs.length ? getPhaseForDate(today, runs) : null;
+    const isOnPeriod = new Set(periodLog).has(today);
+    const daysUntilNext = getDaysUntilNext(runs);
+    firebase.database(_fbApp).ref('agenda/' + coupleCode).set({
+      mood: todayData.mood || null,
+      phase: phase || null,
+      isOnPeriod,
+      daysUntilNext: daysUntilNext !== null ? daysUntilNext : null,
+      lastUpdated: Date.now()
+    });
+  } catch(e) {}
+}
 
 function save() {
   saveToday(todayData);
+  syncToPartner();
 }
 
 // ─── PERIOD / CYCLE HELPERS ───
@@ -1537,6 +1760,34 @@ function renderToday(app) {
       <textarea id="journal-textarea" rows="7" placeholder="Spill the tea with yourself...">${todayData.journalText || ''}</textarea>
       <div class="word-count" id="word-count"></div>
     </section>
+
+    <!-- Partner Connect -->
+    ${(() => {
+      if (!_isFirebaseReady()) return `
+        <div class="partner-connect-card">
+          <p class="section-label">Share with your partner 💕</p>
+          <p class="partner-connect-hint">Set up Firebase first (see the comment at the top of the script) to enable live sharing with him.</p>
+        </div>`;
+      if (!coupleCode) return `
+        <div class="partner-connect-card">
+          <p class="section-label">Share with your partner 💕</p>
+          <p class="partner-connect-hint">Let him see your mood and cycle phase in real-time — just the basics, nothing private.</p>
+          <button class="partner-generate-btn" onclick="window.partnerGenCode()">Generate a couple code ✦</button>
+        </div>`;
+      const shareUrl = location.href.split('?')[0] + '?code=' + coupleCode;
+      return `
+        <div class="partner-connect-card">
+          <p class="section-label">Your partner link 💕</p>
+          <p class="partner-connect-hint">He opens this link and sees your mood + phase in real-time.</p>
+          <div class="code-pill" onclick="window.partnerCopyCode('${coupleCode}')">
+            ${coupleCode} <span class="code-pill-copy">copy</span>
+          </div><br>
+          <div class="partner-share-row">
+            <button class="partner-share-btn" onclick="window.partnerCopyLink('${encodeURIComponent(shareUrl)}')">Copy link 🔗</button>
+            <button class="partner-share-btn secondary" onclick="window.partnerGenCode()">New code</button>
+          </div>
+        </div>`;
+    })()}
 
     <footer>She believed she could, so she did. 👑</footer>
   `;
@@ -1909,6 +2160,19 @@ window.adjustHabitGoal = function(delta) {
   render();
 };
 
+// ─── PARTNER CONNECT ACTIONS ───
+window.partnerGenCode = function() {
+  generateCoupleCode();
+  render();
+};
+window.partnerCopyCode = function(code) {
+  navigator.clipboard && navigator.clipboard.writeText(code).catch(() => {});
+};
+window.partnerCopyLink = function(encodedUrl) {
+  const url = decodeURIComponent(encodedUrl);
+  navigator.clipboard && navigator.clipboard.writeText(url).catch(() => {});
+};
+
 // ─── MOOD ───
 window.setMood = function(val) {
   todayData.mood = todayData.mood === val ? null : val;
@@ -2045,6 +2309,198 @@ function renderStats(app) {
   `;
 }
 
+// ─── PARTNER VIEW ───
+function renderPartner(app, code) {
+  const moodEmojis  = ['😔','😕','😐','🙂','😊'];
+  const moodLabels  = ['Rough','Meh','Okay','Good','Great'];
+  const moodTips    = [
+    'She\'s having a rough one. Ask what she needs — then actually do it.',
+    'She\'s feeling off. A small gesture goes a long way today.',
+    'She\'s steady. Keep the vibe calm and positive.',
+    'She\'s feeling good — a great time to connect.',
+    'She\'s thriving. Match her energy and celebrate her.',
+  ];
+
+  const phaseMeta = {
+    menstrual: {
+      icon: '🩸', name: 'Menstrual', sub: 'The Rest Phase',
+      tips: [
+        'Heat pad, her favourite snacks, and zero demands — be the hero today.',
+        "Don't take it personally if she's extra. Her body is working overtime.",
+        'Ask what she needs, then actually do it. Just show up.',
+      ],
+    },
+    follicular: {
+      icon: '🌱', name: 'Follicular', sub: 'The Rise',
+      tips: [
+        'Her energy is climbing — she\'s full of ideas and momentum.',
+        'Great time for dates, deep conversations, and making plans together.',
+        'She\'s feeling herself. Match her energy and be present.',
+      ],
+    },
+    ovulation: {
+      icon: '✨', name: 'Ovulation', sub: 'The Peak',
+      tips: [
+        'She is literally glowing right now. Be there for it.',
+        'Best window for quality time, special gestures, and real connection.',
+        'She\'s at her most confident — hype her up, king.',
+      ],
+    },
+    luteal: {
+      icon: '🌙', name: 'Luteal', sub: 'The Descent',
+      tips: [
+        'She may need more patience and less noise from you this week.',
+        'Not difficult — her body is preparing. Be her soft landing.',
+        'Comfort over everything. Fewer plans, more presence.',
+      ],
+    },
+  };
+
+  // Show entry screen if no code in URL
+  if (!code) {
+    app.innerHTML = `
+      <div class="partner-view-wrap">
+        <div class="partner-header">
+          <div class="partner-crown">💕</div>
+          <h1 class="partner-title">Partner View</h1>
+          <p class="partner-subtitle">Enter her couple code to connect</p>
+        </div>
+        <div class="partner-code-entry">
+          <h2>Enter the code she shared</h2>
+          <p>She can find it in the app under "Share with your partner" at the bottom of Today.</p>
+          <input class="partner-code-input" id="pcode-input" maxlength="6" placeholder="e.g. PINK7X" autocomplete="off" autocapitalize="characters">
+          <button class="partner-code-submit" onclick="window._partnerSubmitCode()">Connect ✦</button>
+        </div>
+      </div>`;
+    window._partnerSubmitCode = function() {
+      const val = (document.getElementById('pcode-input').value || '').trim().toUpperCase();
+      if (val.length < 3) return;
+      const url = new URL(location.href);
+      url.searchParams.set('code', val);
+      location.href = url.toString();
+    };
+    return;
+  }
+
+  // Subscribe to Firebase live data
+  if (!_isFirebaseReady()) {
+    app.innerHTML = `
+      <div class="partner-view-wrap">
+        <div class="partner-header">
+          <div class="partner-crown">💕</div>
+          <h1 class="partner-title">Partner View</h1>
+        </div>
+        <div class="partner-no-data" style="margin:0 16px">Firebase isn't set up yet in this copy of the app. Ask her to fill in the Firebase config first.</div>
+      </div>`;
+    return;
+  }
+
+  if (!_initFb()) {
+    app.innerHTML = `<div class="partner-view-wrap"><div class="partner-empty">Couldn't connect to Firebase. Check your internet connection and try again.</div></div>`;
+    return;
+  }
+
+  function buildPartnerHTML(data, updatedMs) {
+    const hasData = data && (data.mood || data.phase);
+    const timeAgo = updatedMs ? (() => {
+      const diff = Math.round((Date.now() - updatedMs) / 60000);
+      if (diff < 1) return 'just now';
+      if (diff === 1) return '1 min ago';
+      if (diff < 60) return diff + ' min ago';
+      const h = Math.round(diff / 60);
+      return h === 1 ? '1 hour ago' : h + ' hours ago';
+    })() : '';
+
+    if (!hasData) {
+      return `
+        <div class="partner-view-wrap">
+          <div class="partner-header">
+            <div class="partner-crown">👑</div>
+            <h1 class="partner-title">She hasn't updated yet</h1>
+            <p class="partner-subtitle">Check back later 🌸</p>
+            ${timeAgo ? `<p class="partner-meta">Last seen ${timeAgo}</p>` : ''}
+          </div>
+          <div class="partner-no-data" style="margin:0 16px">She'll show up here as soon as she sets her mood or logs a cycle day.</div>
+        </div>`;
+    }
+
+    const mood = data.mood;
+    const phase = data.phase;
+    const isOnPeriod = data.isOnPeriod;
+    const daysUntilNext = data.daysUntilNext;
+    const pm = phase && phaseMeta[phase] ? phaseMeta[phase] : null;
+
+    const moodCard = mood ? `
+      <div class="partner-card">
+        <p class="partner-card-label">Her mood today</p>
+        <span class="partner-mood-emoji">${moodEmojis[mood - 1]}</span>
+        <p class="partner-mood-label">Feeling ${moodLabels[mood - 1]}</p>
+        <p class="partner-mood-tip">${moodTips[mood - 1]}</p>
+      </div>` : '';
+
+    const periodCard = isOnPeriod ? `
+      <div class="partner-card partner-period-banner">
+        <p class="partner-card-label">Right now</p>
+        <p class="partner-period-title">🩸 She's on her period</p>
+        <ul class="partner-tips" style="margin-top:12px">
+          <li>Heat pad, her favourite snacks, and zero demands — be the hero today.</li>
+          <li>Don't take it personally if she's extra. Her body is working overtime.</li>
+          <li>Ask what she needs, then actually do it. Just show up.</li>
+        </ul>
+      </div>` : '';
+
+    const phaseCard = pm ? `
+      <div class="partner-card">
+        <p class="partner-card-label">Her cycle phase</p>
+        <p class="partner-phase-name">${pm.icon} ${pm.name}</p>
+        <p class="partner-phase-sub">${pm.sub}</p>
+        <ul class="partner-tips">
+          ${pm.tips.map(t => `<li>${t}</li>`).join('')}
+        </ul>
+      </div>` : '';
+
+    const daysCard = daysUntilNext !== null && daysUntilNext !== undefined ? `
+      <div class="partner-card">
+        <p class="partner-card-label">Period countdown</p>
+        <div class="partner-days-badge">
+          <strong>${daysUntilNext === 0 ? '!' : daysUntilNext}</strong>
+          ${daysUntilNext === 0 ? 'Period expected today' : daysUntilNext === 1 ? 'day until her next period' : 'days until her next period'}
+        </div>
+      </div>` : '';
+
+    return `
+      <div class="partner-view-wrap">
+        <div class="partner-header">
+          <div class="partner-crown">👑</div>
+          <h1 class="partner-title">How she's doing</h1>
+          <p class="partner-subtitle">Real-time · only for you</p>
+          ${timeAgo ? `<p class="partner-meta">Updated ${timeAgo}</p>` : ''}
+        </div>
+        <div class="partner-cards">
+          ${moodCard}
+          ${periodCard}
+          ${phaseCard}
+          ${daysCard}
+        </div>
+      </div>`;
+  }
+
+  // Initial loading state
+  app.innerHTML = `<div class="partner-view-wrap"><div class="partner-empty">Connecting…<br>🌸</div></div>`;
+
+  // Live listener
+  try {
+    firebase.database(_fbApp).ref('agenda/' + code).on('value', snapshot => {
+      const data = snapshot.val();
+      app.innerHTML = buildPartnerHTML(data, data && data.lastUpdated ? data.lastUpdated : null);
+    }, () => {
+      app.innerHTML = `<div class="partner-view-wrap"><div class="partner-empty">Couldn't load data.<br>Check the code and your connection.</div></div>`;
+    });
+  } catch(e) {
+    app.innerHTML = `<div class="partner-view-wrap"><div class="partner-empty">Something went wrong. Try refreshing.</div></div>`;
+  }
+}
+
 // ─── NAV ───
 window.switchView = function(view) {
   currentView = view;
@@ -2058,7 +2514,16 @@ document.addEventListener('visibilitychange', () => {
 });
 
 // ─── INIT ───
-render();
+(function() {
+  const urlCode = new URLSearchParams(location.search).get('code');
+  if (urlCode) {
+    // Partner mode — show his read-only view
+    document.title = 'Partner View 💕';
+    renderPartner(document.getElementById('app'), urlCode.toUpperCase());
+  } else {
+    render();
+  }
+})();
 
 // ─── PWA SERVICE WORKER (inline via Blob URL) ───
 // Registers a caching service worker so the app works offline and
