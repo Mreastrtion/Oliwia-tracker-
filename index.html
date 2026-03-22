@@ -839,6 +839,33 @@
   }
   .cal-nav-btn:hover:not(:disabled) { background: rgba(212,140,180,0.12); }
   .cal-nav-btn:disabled { opacity: 0.25; cursor: default; }
+  .lang-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin: -20px 0 18px;
+  }
+  .lang-btn {
+    background: none;
+    border: 1px solid rgba(212,140,180,0.25);
+    border-radius: 12px;
+    padding: 3px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lang-btn.active {
+    background: rgba(212,140,180,0.15);
+    border-color: var(--pink-mid);
+    color: var(--pink-mid);
+  }
+  .lang-btn:hover:not(.active) { border-color: rgba(212,140,180,0.4); color: var(--pink-mid); }
+  .lang-sep { color: var(--text-muted); font-size: 11px; font-family: 'DM Sans', sans-serif; }
   .cal-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -1216,6 +1243,96 @@ const TRANSLATIONS = {
 };
 
 // ─── DATA ───
+const SHADOW_WORK_TR = [
+  "Bugün hangi duygudan kaçındım ve neden?",
+  "Birileri tarafından gerçekten görüldüğümü en son ne zaman hissettim?",
+  "Kendime anlattığım ama doğru olmayabilecek hikaye nedir?",
+  "İnsanların benim hakkımda öğrenmesinden korktuğum şey nedir?",
+  "En son ne zaman kendi sınırlarımı ihlal ettim?",
+  "Bugün çocukluğumdan hangi kalıp ortaya çıktı?",
+  "Kime bir şeyler kanıtlamaya çalışıyorum?",
+  "Kimse izlemeseydi ne farklı yapardım?",
+  "Kendimde en çok hangi parçayı yargılıyorum?",
+  "Bana artık hizmet etmeyen neyi tutuyorum?",
+  "En son ne zaman evet dedim ama hayır demek istedim?",
+  "İç eleştirmenin sesi nasıl — aslında kimin sesi?",
+  "Başkalarına yansıttığım ama aslında bana ait olan nedir?",
+  "Yapabilseydim kendimi ne için affederdim?",
+  "Başkalarına bakarken kendi ihtiyaçlarımı nasıl ihmal ediyorum?",
+  "Şu an kararlarımı hangi korku yönetiyor?",
+  "En son ne zaman gerçekten kendimle gurur duydum?",
+  "Hangi rahatsız edici gerçekten kaçınıyorum?",
+  "10 yaşındaki ben şimdiki haline ne düşünürdü?",
+  "Bugün hangi maskeyi taktım ve kimin için?",
+  "Hayatımın neresinde hak ettiğimden azına razı oluyorum?",
+  "Beni en çok ne tetikliyor — ve hangi yarayı dokunuyor?",
+  "Güçlü olmak zorunda olmasaydım, kendime ne hissettirirdim?",
+  "Hayatımda hangi ilişki dinamiği tekrar tekrar oluyor?",
+  "Henüz kabul etmediğim neyi yasıyorum?",
+  "Bir hafta insanları memnun etmeyi bırakırsam ne değişir?",
+  "Korkudan dolayı hangi kimliğe tutunuyorum?",
+  "Kendimle en son ne zaman tam dürüst oldum?",
+  "Kendime şefkat göstermek şu an nasıl görünürdü?",
+  "Bırakmaya hazır olduğum, miras aldığım bir inanç nedir?",
+  "Bana vermeyi hak ettiğim doğrulamayı başkalarında nerede arıyorum?",
+  "Şu an hangi duyguyu dikkat dağıtmayla uyuşturuyorum?",
+  "İdeal benim, şimdiki benim tarafından kaçınılan ne yapar?",
+  "Etrafında tam olarak kendim olamadığım kişi kim?",
+  "Başarısız olamayacağımı bilseydim ne yapardım?",
+  "Başlamak için kimin iznini bekliyorum?",
+  "Geçmişimin hangi parçası için hâlâ kendimi cezalandırıyorum?",
+  "Başkalarında kıskandığım, aslında kendim için istediğim nedir?",
+  "En son ne zaman yardım istedim — ve neden daha fazla yapmıyorum?",
+  "Gerçekten sevildiğime inansaydım ne değişirdi?",
+  "Kendim hakkında anlattığım, beni küçülten hikaye nedir?",
+  "Güçlü yönlerimden hangisi aslında bir başa çıkma mekanizması?",
+  "Gerçek arzudan değil görevden dolayı ne yapıyorum?",
+  "Göstermeyi en çok korktuğum duygu nedir?",
+  "Hayatımın neresinde sahtekar gibi hissediyorum?",
+  "Belirlemekten çok korktuğum sınır nedir?",
+  "Kendi zamanıma gerçekten değer versem, ne yapmayı bırakırdım?",
+  "Vücudum bilen ne, zihin sürekli görmezden geliyor?",
+  "Kendimi, bana uygulanamayan şeylerle ne zaman karşılaştırıyorum?",
+  "Gerçekte kim olduğumdan en çok ne zaman kopukluk hissediyorum?",
+  "Kendi değerimi haklı çıkarmak için neyi aşırı açıklıyorum?",
+  "Gelecekteki benime bu an hakkında ne söylerdim?",
+  "Birinin bana sormak isteyeceğini gizlice umduğum şey nedir?",
+  "İyi olduğumu pretend etmekten yorulan hangi parçam var?",
+  "Utanç denklemde olmasaydı ne geri alırdım?",
+  "Başarılı olmama izin versem ne olacağından korkuyorum?",
+  "Yeterli olmak benim için aslında nasıl görünür?",
+  "Kendime alan açmadığım neyi yasıyorum?",
+  "Fazla olarak görmezden geldiğim arzu nedir?",
+  "Hazır olduğumda yapacağım dediğim şey nedir ve hazırlık neye benzeyecek?",
+  "Huzuru korumak için kendi bilgimi nerede ihanete uğratıyorum?",
+  "Dinlenmeye karşı direncim, öz değerim hakkında ne ortaya koyuyor?",
+  "Çocukken aşk hakkında emip içselleştirdiğim ve hâlâ yaşadığım inanç nedir?",
+  "İnsanları hayal kırıklığına uğratmayı düşünmeden farklı ne yapardım?",
+  "Kendimden en az paylaşmak istediğim kısım hangisi — neden?",
+  "Olmak istediğim kişiyle çelişen ne yapıyorum?",
+  "Başkalarından onay hiç olmasa neyin peşinden giderdim?",
+  "İnsanların bana yapıştırdığı tüm etiketleri kaldırsam kim olurdum?",
+  "Ev benim için nasıl hissettiriyor — ve bunu kendime oluşturuyor muyum?",
+  "Gerçekten bilinmek hakkında en çok neden korkuyorum?",
+  "Hiçbir zaman aslında sağlıklı olmayan hangi aşk versiyonunu hâlâ kovalıyorum?",
+  "Vücudumla ilişkim, kendimle ilişkimi nasıl yansıtıyor?",
+  "Daha iyisini hak ettiğime inansaydım yarın neyi tolere etmeyi bırakırdım?",
+  "Sürekli uzaklaştırdığım hangi duygu vücudumda ortaya çıkıyor?",
+  "Bilmediğimi pretend ettiğim şey nedir?",
+  "Kendimden koşulsuz sevgi bugün nasıl görünürdü?",
+  "Geleceğim için vizyonumun hangi parçasını sessizce sabote ediyorum?",
+  "Şu an hangi eski yara tekrar açılıyor — ve ne ihtiyacı var?",
+  "Bugün kendime söylemekten kaçındığım en dürüst şey nedir?",
+  "Tanıdık hissettirdiği için tekrarladığım, bana hizmet etmediği için değil, hangi kalıplar var?",
+  "Kontrol ihtiyacım, güvenmekten korktuğum şey hakkında ne söylüyor?",
+  "Bir ilişkiyi veya rolü sürdürmek için kendimi nerede küçültüyorum?",
+  "Tam olarak kabul edersem neyi yasayacağım?",
+  "Doğru olmadığını bildiğim ama henüz bırakamadığım kendim hakkındaki inanç nedir?",
+  "Sevgiden ne yapıyorum — ve kayıp korkusundan ne yapıyorum?",
+  "Benim hangi parçam hâlâ başkasından başlamak için izin bekliyor?",
+  "İç çocuğumun bugün benden duymaya en çok ihtiyacı olan şey nedir?"
+];
+
 const SHADOW_WORK = [
   "What emotion did I avoid today, and why?",
   "When did I last feel truly seen by someone?",
@@ -1402,6 +1519,99 @@ const FUN_FACTS = [
   "The human heart beats about 100,000 times a day — yours has never missed a beat for you."
 ];
 
+const FUN_FACTS_TR = [
+  "Ahtapotların üç kalbi ve mavi kanı vardır.",
+  "Bal hiç bozulmaz — Mısır piramitlerinde bulunan 3.000 yıllık bal hâlâ yenebilir durumdaydı.",
+  "Bir flamingo grubuna 'flamboyance' denir. Çok uygun.",
+  "Muzlar meyve sayılır ama çilekler teknik olarak değil. Cüret.",
+  "Tarihin en kısa savaşı 38 dakika sürdü. İkon davranışı.",
+  "Dünyada Samanyolu'ndaki yıldızlardan daha fazla ağaç var.",
+  "Beynin toplam enerjinin %20'sini kullanıyor — güzellik ve zeka bir arada.",
+  "İneklerin en iyi arkadaşları vardır ve ayrıldıklarında stres yaşarlar. Anlıyorum.",
+  "Deniz samurları uyurken birbirlerinin elini tutar, birbirinden ayrılmasın diye.",
+  "Venüs'te bir gün, Venüs'teki bir yıldan uzun sürer. O da kendine göre zaman alır.",
+  "Köpekbalıkları ağaçlardan yaklaşık 50 milyon yıl önce var oldu.",
+  "İskoçya'nın milli hayvanı unicorn'dur. Olması gerektiği gibi.",
+  "Kelebekler ayaklarıyla tatma duyusuna sahip. İkonik çoklu görev.",
+  "Mavi balinanın kalp atışını 3 km öteden duyabilirsin.",
+  "Kleopatra, Büyük Piramit'ten çok Ay'a iniş yılına daha yakın yaşadı.",
+  "'i' ve 'j' harflerinin üstündeki noktaya 'tittle' denir. Şirin.",
+  "Kutup ayısının kürü aslında beyaz değil, transparan. Sürpriz.",
+  "DNA'nın %60'ını muzla paylaşıyorsun. Mütevazı kal.",
+  "Eyfel Kulesi yazın 15 cm'e kadar uzayabilir. Büyüme çağı.",
+  "İnsanlar karanlıkta parlar — ışık sadece gözlerimizin göremeyeceği kadar zayıf.",
+  "Yunusların birbirleri için isimleri vardır. Sosyal kraliçeler.",
+  "Ananas büyümesi yaklaşık iki yıl sürer. İyi şeyler zaman alır.",
+  "Bulutlar bir milyar pounddan fazla ağırlık taşıyabilir. Hafif ve güçlü.",
+  "Arılar insan yüzlerini tanıyabilir. Seni de inceliyorlar.",
+  "Karidesın kalbi kafasındadır. Kalbiyle liderlik et.",
+  "Venüs, saat yönünde dönen tek gezegendir. O farklı.",
+  "Tek bir örümcek ağı ipliği çelik telinden daha güçlüdür. Narin ama kuvvetli.",
+  "Gözlemlenebilir evrende atomlardan daha fazla olası satranç oyunu var.",
+  "Vombatların dışkısı küp şeklindedir. Doğa çıldırmış.",
+  "Şimşek çakması güneş yüzeyinden beş kat daha sıcak.",
+  "Kargalar insan yüzlerini hatırlar ve yıllarca kin besler. Saygı.",
+  "Yağmur kokusunun bir adı vardır: petrihor. Tam bir ruh hali.",
+  "Ağaçlar yeraltı mantar ağları aracılığıyla iletişim kurar. Doğanın WiFi'ı.",
+  "Filler zıplayamayan tek kara hayvanıdır. Zaten zıplamaları gerekmiyor.",
+  "Pringles kutusunun mucidi, bu kutunun içine gömüldü. İstek üzerine.",
+  "Salyangoz üç yıl uyuyabilir. Asıl glow-up dönemi bu.",
+  "Büyük Okyanus, aydan daha geniştir. Düşündür.",
+  "Kediler tatlılığı tadamaz. Baştan çıkarılmadan yaşıyorlar.",
+  "Oxford Üniversitesi Aztec İmparatorluğu'ndan daha eski. Mimari kraliçe.",
+  "Penguenler taş vererek evlenme teklif eder. Romanın seviyesi eşsiz.",
+  "İnsan burnu bir trilyon farklı kokuyu ayırt edebilir.",
+  "Tembel hayvanlar haftada yalnızca bir kez tuvalet ihtiyacı duyar. Yavaş ve sürdürülebilir.",
+  "Satürn su üzerinde yüzebilir — sıvıdan daha az yoğun. Zahmetsizce.",
+  "Bir baykuş grubuna 'parlamento' denir. İşleri yönetiyorlar.",
+  "Istakozlar eskiden o kadar değersiz sayılırdı ki mahkumlara yedirilirdi.",
+  "Ay, Dünya'dan yılda 3,8 cm uzaklaşıyor. Çağından yavaşça ayrılıyor.",
+  "Ayçiçekleri bulutlu havalarda bile güneşi takip eder. Sonsuz iyimserler.",
+  "Sinekkuşunun kalbi dakikada 1.200 kereden fazla atar.",
+  "Samurlar favori taşlarını küçük bir cilt kesesinde taşır. Duygusal kraliçeler.",
+  "Parmak izlerin daha doğmadan önce oluştu ve sonsuza kadar sana özgü.",
+  "Bazı kaplumbağalar kışın popolarından nefes alır. Her yolla hayatta kalma.",
+  "Bukalemunlar ruh hallerini iletmek için renk değiştirir, kamuflaj için değil. Duygusal.",
+  "Teknik olarak ölümsüz bir denizanası türü var. Biyolojik olarak yenilmez.",
+  "Kleopatra, ilk iPhone'a Büyük Piramit'ten daha yakın bir dönemde yaşadı.",
+  "Mantis karidesi 16 farklı renk alıcısına sahip. Bizim üçümüz var. Alçaltıcı.",
+  "Tüm dev pandalar Çin'e aittir — yabancı hayvanat bahçelerindekiler dahil.",
+  "Güneş'i doldurmak için yaklaşık 1,3 milyon Dünya gerekir. O tam da o kız.",
+  "Antep fıstıkları teknik olarak meyvedir. Daha çok mücevher gibi.",
+  "Kangurular geri yürüyemez. Her zaman ileri doğru hareket ederler. Baş karakter enerjisi.",
+  "Köpekbalıkları nefes almak için yüzmek zorundadır. Dinlenmek seçenek değil. Saygı.",
+  "Fillerin dört dizi var — benzersiz mimari.",
+  "Eyfel Kulesi başlangıçta geçici bir yapı olarak düşünülmüştü. O 'kalıyorum' dedi.",
+  "Cam teknik olarak aşırı soğutulmuş bir sıvıdır. Sadece zamanını alır.",
+  "Ortalama bir bulut yaklaşık 500.000 kg ağırlığındadır. Hafiflik sadece onun estetiği.",
+  "Bir kedi grubuna 'clowder' denir. Ve onu yönetiyorlar.",
+  "Pomza adlı volkanik kayaç suda yüzen tek kayaçtır. Jeolojinin bile aralığı var.",
+  "Elektrik yılanı aslında bir yılan değil — bıçakbalığıdır. Etiketler kısıtlayıcı.",
+  "En yakın yıldıza uzay aracı hızıyla ulaşmak yaklaşık 100.000 yıl sürer. Sabır.",
+  "'Deli' kelimesi ilk kez 1950'de Dr. Seuss tarafından kullanıldı. Köken hikayesi.",
+  "Bal porsuklarının derisi o kadar gevşek ki saldırganları ısırmak için içinde dönebilir. Taktiksel.",
+  "Vücudundaki DNA, Güneş'ten Plüton'a 17 kez gidip gelmek için yeterli uzunlukta.",
+  "Bir kuzgun grubuna 'zalimlik' denir. Dramatik. İkonik.",
+  "Domuzlar güneş yanığı alabilir. Aslında SPF kültürünü onlar icat etti.",
+  "Bademler taş meyvelerin tohumlarıdır — temelde küçük şeftali çekirdekleri. Kimlik değişimi.",
+  "Bazı istiridyeler biyolojik cinsiyetlerini birçok kez değiştirebilir. Akışkan ve muhteşem.",
+  "İlk portakallar turuncu değil yeşildi. Hiç görünüşe göre yargılama.",
+  "Bir nötron yıldızının bir çay kaşığı bir milyar ton ağırlığında olurdu. Yoğun ama parlak.",
+  "Filler arılardan korkar. Büyüklerin bile kriptoniti vardır.",
+  "Kargalar oyun oynadığı gözlemlenmiştir. Görünüşe göre neşe herkes için.",
+  "Burnunu tutarken mırıldanamazsın. Dene. Rica ederim.",
+  "Super Soaker'ın mucidi bir NASA mühendisiydi. Mükemmellik çok boyutludur.",
+  "Her kar tanesi eşsiz bir yapıya sahiptir, tıpkı senin gibi. Klişe değil — bilim.",
+  "Bir şimşek çakması bir saniyeden az sürer ama 100.000 dilim ekmek kızartmak için yeterli enerji üretir.",
+  "İnsan gözü yaklaşık 10 milyon farklı rengi ayırt edebilir. Dünyayı tam ayrıntısıyla görüyorsun.",
+  "Kargalar düzenli olarak beslediği insanlara hediye getirir. Başka bir sadakat seviyesi.",
+  "Arılar günlük 5-8 saat uyur. Dinlenme, en çok çalışanlar için bile gerekli.",
+  "Amazon yağmur ormanı dünyanın oksijeninin %20'sini üretir. Sessizce gezegeni taşıyor.",
+  "Neptün ve Uranüs'te elmas yağmuru yağar. Bir yerlerde lüks yağıyor.",
+  "Milyarlarca yıllık atomlardan oluşuyorsun. Tam anlamıyla antik ve ebedisin.",
+  "İnsan kalbi günde yaklaşık 100.000 kez atar — seninki hiç eksik atmadı."
+];
+
 const AFFIRMATIONS = [
   "I am the main character and I'm just getting started.",
   "My energy is magnetic and I attract what I deserve.",
@@ -1495,6 +1705,99 @@ const AFFIRMATIONS = [
   "I am enough, I have enough, and I do enough. Now and always."
 ];
 
+const AFFIRMATIONS_TR = [
+  "Ben baş karakterim ve daha yeni başlıyorum.",
+  "Enerjim mıknatıs gibi ve hak ettiğimi çekiyorum.",
+  "Kovalamam — çekerim. Benim için olan beni bulur.",
+  "Her tek hayalimin değerini taşıyorum.",
+  "Geride değilim. Kimsenin görmediği bir şey inşa ediyorum.",
+  "Her zaman doğru kararı vereceğime güveniyorum.",
+  "Küçük adımlar, büyük enerjiyle bile dağları hareket ettirir.",
+  "Frekansımla uyuşmayan her şeyi bırakıyorum.",
+  "Özürsüz yer kaplıyorum. Bu benim doğal hakkım.",
+  "Zihin güçlü, dağınık günlerde bile.",
+  "Her zaman ilerleme, mükemmellik değil.",
+  "Her zaman olabileceğimi bildiğim kadın oluyorum.",
+  "En zor günlerimin %100'ünden çıktım. Yenilmezim.",
+  "Dinlenme üretkendir. Kazanmak zorunda değilim.",
+  "Kendi ilahi zaman çizelgemdeyim ve tam zamanında.",
+  "Zorluklarım, parlamam için sadece olay gelişimi.",
+  "Nezaketi hak ediyorum, özellikle kendimden.",
+  "Sadece ürettiklerimden çok daha fazlasıyım.",
+  "Her kraliçe bir zamanlar öğrenciydi. Öğrenme çağındayım.",
+  "Girdiğim her odaya aitim. Nokta.",
+  "İç seslerim ben değilim — onları izleyen patronum.",
+  "Bugün konfor yerine cesaret seçiyorum. Korkutucu ama değer.",
+  "Tam resmi göremesem bile süreci güveniyorum.",
+  "Enerjim kutsal ve nereye gittiğini ben seçiyorum.",
+  "Evrilmek için kimsenin iznine ihtiyacım yok.",
+  "İstemesem de dayanıklıyım. Bu güçlü.",
+  "Doğru yol her zaman kolay değil — ama ben bunun için yapıldım.",
+  "İhtiyaçlarıma tek bir özür bile olmadan saygı duyuyorum.",
+  "Güzel bir şekilde çiçek açacak tohumlar ekiyorum bugün.",
+  "Yeterliyim. Şu an. Tam olarak olduğum gibi. Nokta.",
+  "Yeniden başlamıyorum — daha güçlü başlıyorum.",
+  "İyileşmem doğrusal olmak zorunda değil gerçek olmak için.",
+  "Kendime daha fazlasını istemek ve beklemek için izin veriyorum.",
+  "Ben ödülüm. Bunu unutmayı bırakıyorum.",
+  "Her versiyonum beni buraya getirdi. Hepsine saygı duyuyorum.",
+  "Kendimi önce seçiyorum. Yüksek sesle ve suçsuz.",
+  "Rekabet etmem. Yaratırım. Şeridim yalnızca benim.",
+  "Olduğumdan daha ileri olma baskısını bırakıyorum.",
+  "Evren şimdi bile benim lehime çalışıyor.",
+  "Mıknatısım — insanlar içeri girdiğimde değişimi hisseder.",
+  "Kendim olmak yapabileceğim en güçlü şey.",
+  "Standartlarım yüksek çünkü değerimi biliyorum. Uzlaşma yok.",
+  "Tökezleme taşlarını basamaklara dönüştürüyorum. Bu benim süper gücüm.",
+  "İyi şeyler başıma geliyor ve almaya hazırım.",
+  "Bir sonrakini halletmek için ihtiyacım olan her şey içimde var.",
+  "Hassasiyetim zayıflık değil — bu benim derinliğim.",
+  "Beni küçültmemi istemeyen sevgiye layığım.",
+  "Disiplin, yapmak istemediğim günlerde kendimi sevme yolum.",
+  "Sezgime dışarıdan gelen herhangi bir görüşten daha fazla güveniyorum.",
+  "Kimsenin sınırlamaya çalıştığı ben değilim. O hikayeyi büyüdüm.",
+  "Kendim için gösterdiğim her gün bir devrimdir.",
+  "Ben oluyorum — ve olmak güzel.",
+  "Varlığım hediye. Başkalarını rahat ettirmek için onu söndürmeyi bırakıyorum.",
+  "İlerlirken tam olarak olmam gereken yerdeyim. İkisi de doğru.",
+  "Kimse bilmese bile bugün neyin üstesinden geldiğimle gurur duyuyorum.",
+  "Açlıkla değil, enerjimle eşleşen insanları çekiyorum.",
+  "İnşa sürecinde olmak, kırık olmakla aynı şey değil.",
+  "Dün ki ben'den vazgeçiyorum, bugünkü kim olduğuma yer açmak için.",
+  "Korkunun bana söylediğinin ötesinde güçlüyüm ve sonunda ispat ediyorum.",
+  "İyi şeyleri hak etmek için her şeyi bir arada tutmak zorunda değilim.",
+  "Sevdiğim insanlara verdiğim lütfu kendime de veriyorum.",
+  "Değerim ne kadar ürettiğime veya ne kadar meşgul olduğuma bağlı değil.",
+  "Kendime yatırım yapmaya değerim — kendimden, kendim için, önce.",
+  "Geçmişim tavanım değil. Temelim.",
+  "Onu haklı çıkarmaya gerek duymadan neşeye yer açıyorum.",
+  "Fikrimi değiştirmek, yönümü değiştirmek ve yeniden başlamak için izinliyim.",
+  "Doğru kapılar, yanlış olanları zorlamayı bıraktığımda açılıyor.",
+  "Niyetle öncülük ediyorum ve sonucu güveniyorum.",
+  "Küçük kazanımları kutluyorum çünkü momentum böyle inşa ediliyor.",
+  "Hissettirdiği kadar güzel görünen bir hayatı hak ediyorum.",
+  "En yüksek benimle iletişim halindeyim ve o inanılmaz.",
+  "Karşılaştırmayı bırakıyorum — yolculuğum tekil ve bu onun gücü.",
+  "Beni genişleten düşünceler seçiyorum, küçültenler değil.",
+  "İyileşmem sessiz, özel, gerçek ve geçerli.",
+  "Kusurlu gösteriyorum ve bu yine de sayılıyor.",
+  "Netliği çekiyorum çünkü kendimle dürüst olmaya hazırım.",
+  "Hayatın başlamasını beklemiyorum — bu o, ve benim.",
+  "Bu güne tüm benliğimle giriyorum ve hiçbir şeyi geride bırakmıyorum.",
+  "Bunun için yapıldım. Her zaman öyleydim.",
+  "Yükselmem için ihtiyacım olan her şey zaten içimde — bugün ona erişiyorum.",
+  "Göremesem bile büyümenin gerçekleştiğine güveniyorum.",
+  "Henüz etmediğim duaların cevabıyım.",
+  "Bu versiyonuma bahis yapmaya değer. O yüzden yapıyorum.",
+  "Sadece hayatta kalmıyorum. Muhteşem bir şey inşa ediyorum.",
+  "Her seferinde varlığı mükemmelliğe tercih ediyorum.",
+  "Gençken ihtiyacım olan tam kişiyim.",
+  "Hikayem bitmedi — en iyi bölümüne yeni giriyor.",
+  "Ben beklediğim enerji benim.",
+  "Kendi hikayemde baş karakter olmayı hak ediyorum — ve bugün o rolü üstleniyorum.",
+  "Yeterliyim, yeterliğim var ve yeterince yapıyorum. Şimdi ve her zaman."
+];
+
 const DEFAULT_HABITS = [
   { id: "h1", name: "10K steps", icon: "👟" },
   { id: "h2", name: "Gym / Workout", icon: "🏋️‍♀️" },
@@ -1518,16 +1821,17 @@ function dayOfYear() {
 }
 
 function formatDateFull(dateStr) {
+  const locale = lang === 'tr' ? 'tr-TR' : 'en-US';
   if (!dateStr) {
-    return new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    return new Date().toLocaleDateString(locale, { weekday:'long', year:'numeric', month:'long', day:'numeric' });
   }
   const [y,m,d] = dateStr.split('-').map(Number);
-  return new Date(y, m-1, d).toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  return new Date(y, m-1, d).toLocaleDateString(locale, { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 }
 
 function getGreeting() {
   const h = new Date().getHours();
-  return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+  return h < 12 ? t('greeting_morning') : h < 17 ? t('greeting_afternoon') : t('greeting_evening');
 }
 
 // ─── STORAGE ───
@@ -1858,9 +2162,12 @@ function render() {
 
 function renderToday(app) {
   const dy = dayOfYear();
-  const affirmation = AFFIRMATIONS[dy % AFFIRMATIONS.length];
-  const fact = FUN_FACTS[dy % FUN_FACTS.length];
-  const shadowQ = SHADOW_WORK[dy % SHADOW_WORK.length];
+  const _aff = lang === 'tr' ? AFFIRMATIONS_TR : AFFIRMATIONS;
+  const _ff  = lang === 'tr' ? FUN_FACTS_TR    : FUN_FACTS;
+  const _sw  = lang === 'tr' ? SHADOW_WORK_TR  : SHADOW_WORK;
+  const affirmation = _aff[dy % _aff.length];
+  const fact = _ff[dy % _ff.length];
+  const shadowQ = _sw[dy % _sw.length];
   const total = habitConfig.length;
   const completedWeight = habitConfig.reduce((s, h) => s + (Number(todayData.habits[h.id]) || 0), 0);
   const completedFull = habitConfig.filter(h => Number(todayData.habits[h.id]) === 1).length;
@@ -1869,52 +2176,48 @@ function renderToday(app) {
   const goalReached = completedWeight >= effectiveGoal;
 
   const moodEmojis = ['😔','😕','😐','🙂','😊'];
-  const moodLabels = ['rough','meh','okay','good','great'];
+  const moodLabels = [t('mood_rough'),t('mood_meh'),t('mood_okay'),t('mood_good'),t('mood_great')];
 
   app.innerHTML = `
-    <!-- Nav -->
     <nav class="nav">
-      <button class="nav-btn active" onclick="switchView('today')">Today</button>
-      <button class="nav-btn" onclick="switchView('history')">Archive</button>
-      <button class="nav-btn" onclick="switchView('stats')">Stats</button>
-      <button class="nav-btn" onclick="switchView('cycle')">Cycle</button>
+      <button class="nav-btn active" onclick="switchView('today')">${t('nav_today')}</button>
+      <button class="nav-btn" onclick="switchView('history')">${t('nav_archive')}</button>
+      <button class="nav-btn" onclick="switchView('stats')">${t('nav_stats')}</button>
+      <button class="nav-btn" onclick="switchView('cycle')">${t('nav_cycle')}</button>
     </nav>
+    ${langRowHTML()}
 
-    <!-- Header -->
     <header>
       <div class="crown">👑</div>
       <p class="date-label">${formatDateFull()}</p>
-      <h1 class="greeting">${getGreeting()}, gorgeous</h1>
-      <p class="subtitle">The world isn't ready for what you're about to do today ✦</p>
+      <h1 class="greeting">${getGreeting()}${t('greeting_gorgeous')}</h1>
+      <p class="subtitle">${t('subtitle_today')}</p>
     </header>
 
-    <!-- Affirmation -->
     <section class="card card-accent" style="animation-delay:0.1s">
       <span class="card-icon" style="top:10px;right:14px;font-size:28px;animation:float 5s ease-in-out infinite">🦋</span>
-      <p class="section-label">Today's Affirmation</p>
+      <p class="section-label">${t('label_affirmation')}</p>
       <p class="affirmation-text">"${affirmation}"</p>
     </section>
 
-    <!-- Mood Tracker -->
     <section class="card" style="animation-delay:0.12s">
-      <p class="section-label">How are you feeling today?</p>
+      <p class="section-label">${t('label_mood')}</p>
       <div class="mood-picker">
         ${moodEmojis.map((e, i) => `<button class="mood-btn${todayData.mood === i+1 ? ' selected' : ''}" title="${moodLabels[i]}" onclick="setMood(${i+1})">${e}</button>`).join('')}
       </div>
-      ${todayData.mood ? `<p style="text-align:center;margin-top:10px;font-family:'Caveat',cursive;font-size:16px;color:var(--text-sub)">Feeling ${moodLabels[todayData.mood-1]} today ${moodEmojis[todayData.mood-1]}</p>` : ''}
+      ${todayData.mood ? `<p style="text-align:center;margin-top:10px;font-family:'Caveat',cursive;font-size:16px;color:var(--text-sub)">${t('mood_feeling')} ${moodLabels[todayData.mood-1]} ${moodEmojis[todayData.mood-1]}</p>` : ''}
     </section>
 
-    <!-- Habit Tracker -->
     <section class="card" style="animation-delay:0.15s">
       <div class="habit-header">
         <div>
-          <p class="section-label">Habit Tracker</p>
-          <p class="habit-count">${completedWeight % 1 === 0 ? completedWeight : completedWeight.toFixed(1)} / ${effectiveGoal} goal &nbsp;·&nbsp; ${total} total</p>
+          <p class="section-label">${t('label_habits')}</p>
+          <p class="habit-count">${completedWeight % 1 === 0 ? completedWeight : completedWeight.toFixed(1)} / ${effectiveGoal} ${t('word_goal')} &nbsp;·&nbsp; ${total} ${t('word_total')}</p>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <div class="habit-goal-ctrl">
             <button class="goal-btn" onclick="adjustHabitGoal(-1)">−</button>
-            <span class="goal-label">Goal: ${effectiveGoal}</span>
+            <span class="goal-label">${t('goal_label')} ${effectiveGoal}</span>
             <button class="goal-btn" onclick="adjustHabitGoal(1)">+</button>
           </div>
           <div class="habit-pct ${goalReached ? 'done' : ''}">${pct}%</div>
@@ -1925,70 +2228,66 @@ function renderToday(app) {
       </div>
       <div id="habit-list"></div>
       <div id="add-habit-area"></div>
-      ${goalReached ? '<div class="completion-msg">Daily goal slayed — you ate and left no crumbs 💅✨</div>' : ''}
+      ${goalReached ? `<div class="completion-msg">${t('goal_reached')}</div>` : ''}
       ${(() => {
         const milestoneHabits = habitConfig.map(h => ({ h, s: computeStreak(h.id) })).filter(x => [7,14,21,30].includes(x.s));
         if (!milestoneHabits.length) return '';
         const { h, s } = milestoneHabits[0];
-        const msgs = { 7:'7-day streak — a whole week of showing up! 🔥', 14:'14 days strong — you\'re building something real! 🌟', 21:'21 days! New habit unlocked — queen behavior 👑', 30:'30-day streak — you\'re literally unstoppable 💎' };
+        const msgs = { 7:t('streak_7'), 14:t('streak_14'), 21:t('streak_21'), 30:t('streak_30') };
         return `<div class="completion-msg">${h.icon} ${msgs[s]}</div>`;
       })()}
     </section>
 
-    <!-- Fun Fact -->
     <section class="card" style="animation-delay:0.2s">
       <span class="card-icon" style="bottom:8px;right:14px;font-size:24px;animation:float 6s ease-in-out infinite">🔮</span>
-      <p class="section-label">Fun Fact of the Day</p>
+      <p class="section-label">${t('label_funfact')}</p>
       <p class="fact-text">${fact}</p>
     </section>
 
-    <!-- Shadow Work -->
     <section class="card card-shadow" style="animation-delay:0.25s">
       <span class="card-icon" style="top:12px;right:16px;font-size:26px">🌙</span>
-      <p class="section-label">Shadow Work</p>
-      <p class="prompt-hint">Be real with yourself. This is your safe space, babe.</p>
+      <p class="section-label">${t('label_shadow')}</p>
+      <p class="prompt-hint">${t('prompt_shadow')}</p>
       <p class="shadow-question">${shadowQ}</p>
-      <textarea id="shadow-textarea" rows="5" placeholder="Let it all out...">${todayData.shadowAnswer || ''}</textarea>
+      <textarea id="shadow-textarea" rows="5" placeholder="${t('ph_shadow')}">${todayData.shadowAnswer || ''}</textarea>
     </section>
 
-    <!-- Journal -->
     <section class="card" style="animation-delay:0.3s">
       <span class="card-icon" style="top:12px;right:16px;font-size:24px;animation:float 5s ease-in-out infinite 0.5s">🪷</span>
-      <p class="section-label">Personal Thoughts</p>
-      <p class="prompt-hint">Unfiltered, unapologetic, just you.</p>
-      <textarea id="journal-textarea" rows="7" placeholder="Spill the tea with yourself...">${todayData.journalText || ''}</textarea>
+      <p class="section-label">${t('label_journal')}</p>
+      <p class="prompt-hint">${t('prompt_journal')}</p>
+      <textarea id="journal-textarea" rows="7" placeholder="${t('ph_journal')}">${todayData.journalText || ''}</textarea>
       <div class="word-count" id="word-count"></div>
     </section>
 
-    <!-- Partner Connect -->
     ${(() => {
       if (!_isFirebaseReady()) return `
         <div class="partner-connect-card">
-          <p class="section-label">Share with your partner 💕</p>
-          <p class="partner-connect-hint">Set up Firebase first (see the comment at the top of the script) to enable live sharing with him.</p>
+          <p class="section-label">${t('label_partner')}</p>
+          <p class="partner-connect-hint">${t('partner_firebase')}</p>
         </div>`;
       if (!coupleCode) return `
         <div class="partner-connect-card">
-          <p class="section-label">Share with your partner 💕</p>
-          <p class="partner-connect-hint">Let him see your mood and cycle phase in real-time — just the basics, nothing private.</p>
-          <button class="partner-generate-btn" onclick="window.partnerGenCode()">Generate a couple code ✦</button>
+          <p class="section-label">${t('label_partner')}</p>
+          <p class="partner-connect-hint">${t('partner_hint')}</p>
+          <button class="partner-generate-btn" onclick="window.partnerGenCode()">${t('partner_generate')}</button>
         </div>`;
       const shareUrl = location.href.split('?')[0] + '?code=' + coupleCode;
       return `
         <div class="partner-connect-card">
-          <p class="section-label">Your partner link 💕</p>
-          <p class="partner-connect-hint">He opens this link and sees your mood + phase in real-time.</p>
+          <p class="section-label">${t('label_partner_link')}</p>
+          <p class="partner-connect-hint">${t('partner_he_opens')}</p>
           <div class="code-pill" onclick="window.partnerCopyCode('${coupleCode}')">
-            ${coupleCode} <span class="code-pill-copy">copy</span>
+            ${coupleCode} <span class="code-pill-copy">${t('code_copy')}</span>
           </div><br>
           <div class="partner-share-row">
-            <button class="partner-share-btn" onclick="window.partnerCopyLink('${encodeURIComponent(shareUrl)}')">Copy link 🔗</button>
-            <button class="partner-share-btn secondary" onclick="window.partnerGenCode()">New code</button>
+            <button class="partner-share-btn" onclick="window.partnerCopyLink('${encodeURIComponent(shareUrl)}')">${t('partner_copy_link')}</button>
+            <button class="partner-share-btn secondary" onclick="window.partnerGenCode()">${t('partner_new_code')}</button>
           </div>
         </div>`;
     })()}
 
-    <footer>She believed she could, so she did. 👑</footer>
+    <footer>${t('footer_today')}</footer>
   `;
 
   // Render habits
@@ -2036,7 +2335,7 @@ function renderToday(app) {
     addArea.innerHTML = `
       <div class="add-habit-form">
         <input class="icon-input" id="new-icon" value="💅" maxlength="2">
-        <input class="name-input" id="new-name" placeholder="New habit...">
+        <input class="name-input" id="new-name" placeholder="${t('ph_newhabit')}">
         <button class="btn-add" id="btn-add">Add</button>
         <button class="btn-cancel" id="btn-cancel">×</button>
       </div>
@@ -2078,23 +2377,24 @@ function renderHistory(app) {
 
   app.innerHTML = `
     <nav class="nav">
-      <button class="nav-btn" onclick="switchView('today')">Today</button>
-      <button class="nav-btn active" onclick="switchView('history')">Archive</button>
-      <button class="nav-btn" onclick="switchView('stats')">Stats</button>
-      <button class="nav-btn" onclick="switchView('cycle')">Cycle</button>
+      <button class="nav-btn" onclick="switchView('today')">${t('nav_today')}</button>
+      <button class="nav-btn active" onclick="switchView('history')">${t('nav_archive')}</button>
+      <button class="nav-btn" onclick="switchView('stats')">${t('nav_stats')}</button>
+      <button class="nav-btn" onclick="switchView('cycle')">${t('nav_cycle')}</button>
     </nav>
+    ${langRowHTML()}
     <header>
       <div class="crown">📖</div>
-      <h1 class="greeting" style="font-size:clamp(26px,6vw,36px)">Your Archive</h1>
-      <p class="subtitle">Look how far you've come ✦</p>
+      <h1 class="greeting" style="font-size:clamp(26px,6vw,36px)">${t('header_archive')}</h1>
+      <p class="subtitle">${t('subtitle_archive')}</p>
     </header>
     <div id="history-list"></div>
-    <footer>Every page of your story matters. 👑</footer>
+    <footer>${t('footer_archive')}</footer>
   `;
 
   const list = document.getElementById('history-list');
   if (entries.length === 0) {
-    list.innerHTML = '<div class="empty-state">No entries yet — today is day one! 🌱</div>';
+    list.innerHTML = `<div class="empty-state">${t('empty_history')}</div>`;
     return;
   }
 
@@ -2111,28 +2411,29 @@ function renderHistory(app) {
     div.style.animationDelay = (idx * 0.08) + 's';
 
     const moodEmojisH = ['😔','😕','😐','🙂','😊'];
-    const moodLabelsH = ['rough','meh','okay','good','great'];
+    const moodLabelsH = [t('mood_rough'),t('mood_meh'),t('mood_okay'),t('mood_good'),t('mood_great')];
     let html = `<p class="history-date">${formatDateFull(entry.date)}</p>`;
 
     // Mood
     if (entry.mood) {
       html += `<div class="history-section">
-        <p class="history-section-label">Mood</p>
-        <p class="history-text">${moodEmojisH[entry.mood-1]} Feeling ${moodLabelsH[entry.mood-1]}</p>
+        <p class="history-section-label">${t('hist_mood')}</p>
+        <p class="history-text">${moodEmojisH[entry.mood-1]} ${t('hist_feeling')} ${moodLabelsH[entry.mood-1]}</p>
       </div>`;
     }
 
     // Affirmation
+    const _affH = lang === 'tr' ? AFFIRMATIONS_TR : AFFIRMATIONS;
     html += `<div class="history-section">
-      <p class="history-section-label">Affirmation</p>
-      <p class="history-text" style="font-style:italic;color:var(--pink-deep)">"${AFFIRMATIONS[dy % AFFIRMATIONS.length]}"</p>
+      <p class="history-section-label">${t('hist_affirmation')}</p>
+      <p class="history-text" style="font-style:italic;color:var(--pink-deep)">"${_affH[dy % _affH.length]}"</p>
     </div>`;
 
     // Habits
     const habitEntries = Object.entries(entry.habits || {});
     if (habitEntries.length > 0) {
       html += `<div class="history-section">
-        <p class="history-section-label">Habits</p>
+        <p class="history-section-label">${t('hist_habits')}</p>
         <div class="history-habits">`;
       // Try to match with config names
       habitEntries.forEach(([id, done]) => {
@@ -2145,9 +2446,10 @@ function renderHistory(app) {
 
     // Shadow work
     if (entry.shadowAnswer && entry.shadowAnswer.trim()) {
+      const _swH = lang === 'tr' ? SHADOW_WORK_TR : SHADOW_WORK;
       html += `<div class="history-section">
-        <p class="history-section-label">Shadow Work</p>
-        <p class="history-text" style="font-style:italic;margin-bottom:6px;color:var(--pink-deep)">${SHADOW_WORK[dy % SHADOW_WORK.length]}</p>
+        <p class="history-section-label">${t('hist_shadow')}</p>
+        <p class="history-text" style="font-style:italic;margin-bottom:6px;color:var(--pink-deep)">${_swH[dy % _swH.length]}</p>
         <p class="history-text">${entry.shadowAnswer.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</p>
       </div>`;
     }
@@ -2155,7 +2457,7 @@ function renderHistory(app) {
     // Journal
     if (entry.journalText && entry.journalText.trim()) {
       html += `<div class="history-section">
-        <p class="history-section-label">Journal</p>
+        <p class="history-section-label">${t('hist_journal')}</p>
         <p class="history-text">${entry.journalText.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</p>
       </div>`;
     }
@@ -2182,12 +2484,12 @@ window.togglePeriodDay = function(dateStr) {
 function buildCalMonth(year, month, logSet, predictedSet, runs, hideLabel) {
   // month is 0-indexed
   const today = todayKey();
-  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const monthNames = t('months').split(',');
   const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
   // Convert to Mon-first: 0=Mon...6=Sun
   const startOffset = (firstDay + 6) % 7;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const dayLabels = ['M','T','W','T','F','S','S'];
+  const dayLabels = t('weekdays').split(',');
 
   let gridHTML = '';
   // Empty cells before month start
@@ -2246,52 +2548,40 @@ function renderCycle(app) {
   if (!runs.length) {
     countdownHTML = `
       <div class="countdown-wrap">
-        <div class="countdown-msg">Start logging your period days<br>to unlock your cycle predictions, queen 🌙</div>
+        <div class="countdown-msg">${t('cycle_start_logging')}</div>
       </div>`;
   } else if (isOnPeriod) {
     countdownHTML = `
       <div class="countdown-wrap">
         <div style="font-size:48px;line-height:1">🩸</div>
-        <div class="countdown-msg">You're in your era, babe —<br>rest, hydrate, and be as dramatic as needed</div>
+        <div class="countdown-msg">${t('cycle_on_period')}</div>
       </div>`;
   } else {
     const msgs = daysLeft === 1
-      ? "Tomorrow she arrives. Light the candles and warn everyone 🕯️"
+      ? t('cycle_1')
       : daysLeft <= 3
-        ? `${daysLeft} days and she's almost here, queen. Stock up and clear your schedule 👑`
+        ? t('cycle_2_3').replace('{n}', daysLeft)
         : daysLeft <= 7
-          ? `${daysLeft} days until she shows up uninvited and runs the whole show 💅`
+          ? t('cycle_4_7').replace('{n}', daysLeft)
           : daysLeft <= 14
-            ? `${daysLeft} days of pure unbothered energy left — you're glowing, babe ✨`
+            ? t('cycle_8_14').replace('{n}', daysLeft)
             : daysLeft <= 21
-              ? `${daysLeft} days away. Manifest, move, and be magnificent 🦋`
-              : `${daysLeft} days until your body reminds everyone who's boss 👑`;
+              ? t('cycle_15_21').replace('{n}', daysLeft)
+              : t('cycle_22').replace('{n}', daysLeft);
     countdownHTML = `
       <div class="countdown-wrap">
         <div class="countdown-num">${daysLeft}</div>
-        <div class="countdown-unit">days until she arrives</div>
+        <div class="countdown-unit">${t('cycle_unit')}</div>
         <div class="countdown-msg">${msgs}</div>
       </div>`;
   }
 
   // Phase card copy
   const phaseData = {
-    menstrual: {
-      name: 'The Arrival', emoji: '🩸', subtitle: 'Menstrual Phase',
-      desc: 'You\'re bleeding and still showing up. That\'s not weakness — that\'s power, babe.'
-    },
-    follicular: {
-      name: 'The Rise', emoji: '🌱', subtitle: 'Follicular Phase',
-      desc: 'Energy rising, skin glowing, ideas flowing — she\'s back and she means business.'
-    },
-    ovulation: {
-      name: 'The Peak', emoji: '✨', subtitle: 'Ovulation Phase',
-      desc: 'You are magnetic right now. The universe literally cannot ignore you. Walk accordingly.'
-    },
-    luteal: {
-      name: 'The Descent', emoji: '🌙', subtitle: 'Luteal Phase',
-      desc: 'Slow down without apology. Your body is doing serious behind-the-scenes work.'
-    }
+    menstrual: { name: t('phase_menstrual_name'), emoji: '🩸', subtitle: t('phase_menstrual_sub'), desc: t('phase_menstrual_desc') },
+    follicular: { name: t('phase_follicular_name'), emoji: '🌱', subtitle: t('phase_follicular_sub'), desc: t('phase_follicular_desc') },
+    ovulation:  { name: t('phase_ovulation_name'),  emoji: '✨', subtitle: t('phase_ovulation_sub'),  desc: t('phase_ovulation_desc') },
+    luteal:     { name: t('phase_luteal_name'),      emoji: '🌙', subtitle: t('phase_luteal_sub'),      desc: t('phase_luteal_desc') }
   };
 
   const phaseHTML = (runs.length && currentPhase) ? (() => {
@@ -2312,7 +2602,7 @@ function renderCycle(app) {
   // Single month with prev/next navigation
   const now = new Date();
   const d = new Date(now.getFullYear(), now.getMonth() + cycleMonthOffset, 1);
-  const navMonthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const navMonthNames = t('months').split(',');
   const monthsHTML = `<section class="card" style="animation-delay:0.22s">
     <div class="cal-nav-row">
       <button class="cal-nav-btn" onclick="changeCycleMonth(-1)" ${cycleMonthOffset <= -3 ? 'disabled' : ''}>&#8249;</button>
@@ -2321,29 +2611,30 @@ function renderCycle(app) {
     </div>
     ${buildCalMonth(d.getFullYear(), d.getMonth(), logSet, predictedSet, runs, true)}
     <div class="cal-legend" style="margin-top:14px">
-      <div class="cal-legend-item"><div class="legend-dot period"></div> Period logged</div>
-      <div class="cal-legend-item"><div class="legend-dot predicted"></div> Estimated</div>
-      <div class="cal-legend-item"><div class="legend-dot today"></div> Today</div>
+      <div class="cal-legend-item"><div class="legend-dot period"></div> ${t('cal_period')}</div>
+      <div class="cal-legend-item"><div class="legend-dot predicted"></div> ${t('cal_estimated')}</div>
+      <div class="cal-legend-item"><div class="legend-dot today"></div> ${t('cal_today')}</div>
     </div>
     <div class="phase-legend" style="margin-top:10px">
-      <div class="phase-legend-item"><div class="phase-pip menstrual"></div> Menstrual</div>
-      <div class="phase-legend-item"><div class="phase-pip follicular"></div> Follicular</div>
-      <div class="phase-legend-item"><div class="phase-pip ovulation"></div> Ovulation</div>
-      <div class="phase-legend-item"><div class="phase-pip luteal"></div> Luteal</div>
+      <div class="phase-legend-item"><div class="phase-pip menstrual"></div> ${t('cal_menstrual')}</div>
+      <div class="phase-legend-item"><div class="phase-pip follicular"></div> ${t('cal_follicular')}</div>
+      <div class="phase-legend-item"><div class="phase-pip ovulation"></div> ${t('cal_ovulation')}</div>
+      <div class="phase-legend-item"><div class="phase-pip luteal"></div> ${t('cal_luteal')}</div>
     </div>
   </section>`;
 
   app.innerHTML = `
     <nav class="nav">
-      <button class="nav-btn" onclick="switchView('today')">Today</button>
-      <button class="nav-btn" onclick="switchView('history')">Archive</button>
-      <button class="nav-btn" onclick="switchView('stats')">Stats</button>
-      <button class="nav-btn active" onclick="switchView('cycle')">Cycle</button>
+      <button class="nav-btn" onclick="switchView('today')">${t('nav_today')}</button>
+      <button class="nav-btn" onclick="switchView('history')">${t('nav_archive')}</button>
+      <button class="nav-btn" onclick="switchView('stats')">${t('nav_stats')}</button>
+      <button class="nav-btn active" onclick="switchView('cycle')">${t('nav_cycle')}</button>
     </nav>
+    ${langRowHTML()}
     <header>
       <div class="crown" style="font-size:28px">🌸</div>
-      <h1 class="greeting" style="font-size:clamp(26px,6vw,36px)">Your Cycle</h1>
-      <p class="subtitle">She runs on her own schedule, and that's the law ✦</p>
+      <h1 class="greeting" style="font-size:clamp(26px,6vw,36px)">${t('header_cycle')}</h1>
+      <p class="subtitle">${t('subtitle_cycle')}</p>
     </header>
 
     <section class="card card-accent" style="animation-delay:0.1s">
@@ -2355,7 +2646,7 @@ function renderCycle(app) {
 
     ${monthsHTML}
 
-    <footer>Your body is the blueprint, queen. 🌸</footer>
+    <footer>${t('footer_cycle')}</footer>
   `;
 }
 
@@ -2411,7 +2702,7 @@ function renderStats(app) {
     const d = new Date();
     d.setDate(d.getDate() - i);
     const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    const labels = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+    const labels = t('week_labels').split(',');
     const label = labels[d.getDay()];
     const entry = entries.find(e => e.date === key);
     let pct = null;
@@ -2424,39 +2715,38 @@ function renderStats(app) {
 
   app.innerHTML = `
     <nav class="nav">
-      <button class="nav-btn" onclick="switchView('today')">Today</button>
-      <button class="nav-btn" onclick="switchView('history')">Archive</button>
-      <button class="nav-btn active" onclick="switchView('stats')">Stats</button>
-      <button class="nav-btn" onclick="switchView('cycle')">Cycle</button>
+      <button class="nav-btn" onclick="switchView('today')">${t('nav_today')}</button>
+      <button class="nav-btn" onclick="switchView('history')">${t('nav_archive')}</button>
+      <button class="nav-btn active" onclick="switchView('stats')">${t('nav_stats')}</button>
+      <button class="nav-btn" onclick="switchView('cycle')">${t('nav_cycle')}</button>
     </nav>
+    ${langRowHTML()}
     <header>
       <div class="crown">✦</div>
-      <h1 class="greeting" style="font-size:clamp(26px,6vw,36px)">Your Journey</h1>
-      <p class="subtitle">Every day counts, babe ✦</p>
+      <h1 class="greeting" style="font-size:clamp(26px,6vw,36px)">${t('header_stats')}</h1>
+      <p class="subtitle">${t('subtitle_stats')}</p>
     </header>
 
-    <!-- Overview -->
     <section class="card card-accent" style="animation-delay:0.1s">
-      <p class="section-label">Overview</p>
+      <p class="section-label">${t('label_overview')}</p>
       <div class="overview-grid">
         <div class="overview-cell">
           <div class="overview-num">${totalDays}</div>
-          <div class="overview-label">Days tracked</div>
+          <div class="overview-label">${t('stats_days_tracked')}</div>
         </div>
         <div class="overview-cell">
           <div class="overview-num">${avgPct}%</div>
-          <div class="overview-label">Avg daily</div>
+          <div class="overview-label">${t('stats_avg_daily')}</div>
         </div>
         <div class="overview-cell">
           <div class="overview-num">${bestCompletion}%</div>
-          <div class="overview-label">Best day</div>
+          <div class="overview-label">${t('stats_best_day')}</div>
         </div>
       </div>
     </section>
 
-    <!-- This Week -->
     <section class="card" style="animation-delay:0.15s">
-      <p class="section-label">This Week</p>
+      <p class="section-label">${t('label_week')}</p>
       <div class="stats-week-row">
         ${weekDays.map(wd => {
           let cls = 'week-dot';
@@ -2484,11 +2774,10 @@ function renderStats(app) {
       </div>
     </section>
 
-    <!-- Habit Streaks -->
     <section class="card" style="animation-delay:0.2s">
-      <p class="section-label">Habit Streaks</p>
+      <p class="section-label">${t('label_streaks')}</p>
       ${habitConfig.length === 0
-        ? '<p style="text-align:center;color:var(--text-muted);font-family:\'DM Sans\',sans-serif;font-size:14px;padding:10px 0">No habits yet — add some!</p>'
+        ? `<p style="text-align:center;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 0">${t('stats_no_habits')}</p>`
         : `<div class="streak-grid">${habitConfig.map(h => {
             const cur = computeStreak(h.id);
             const best = getBestStreak(h.id);
@@ -2497,13 +2786,13 @@ function renderStats(app) {
               <div class="streak-card-icon">${h.icon}</div>
               <div class="streak-card-name">${h.name}</div>
               ${cur === 0 && best === 0
-                ? `<div class="streak-card-start">Start your streak! 🌱</div>`
+                ? `<div class="streak-card-start">${t('stats_start_streak')}</div>`
                 : `<div class="streak-card-now">
                     <span class="streak-fire-em">🔥</span>
                     <span class="streak-big-num">${cur}</span>
-                    <span class="streak-big-unit">days</span>
+                    <span class="streak-big-unit">${t('stats_days')}</span>
                   </div>
-                  <div class="streak-card-best">Best: ${best} days ⭐</div>
+                  <div class="streak-card-best">${t('stats_best')} ${best} ${t('stats_days')} ⭐</div>
                   <div class="streak-bar-track"><div class="streak-bar-fill" style="width:${barPct}%"></div></div>`
               }
             </div>`;
@@ -2511,7 +2800,7 @@ function renderStats(app) {
       }
     </section>
 
-    <footer>Keep going. The data doesn't lie. 👑</footer>
+    <footer>${t('footer_stats')}</footer>
   `;
 }
 
